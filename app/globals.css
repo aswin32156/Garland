@@ -1,26 +1,208 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+  /* ── Floral Color Palette ── */
+  --color-rose-50: #fff1f5;
+  --color-rose-100: #ffe4ec;
+  --color-rose-200: #fecdd9;
+  --color-rose-300: #fda4b8;
+  --color-rose-400: #fb7195;
+  --color-rose-500: #f43f6e;
+  --color-rose-600: #e11d4a;
+  --color-rose-700: #be1139;
+  --color-rose-800: #9f1239;
+  --color-rose-900: #881337;
+
+  --color-blush-50: #fdf4f0;
+  --color-blush-100: #fbe8de;
+  --color-blush-200: #f7d0bc;
+  --color-blush-300: #f0ad8e;
+  --color-blush-400: #e87d5a;
+  --color-blush-500: #e05c38;
+  --color-blush-600: #cc432a;
+
+  --color-jade-50: #f0fdf4;
+  --color-jade-100: #dcfce7;
+  --color-jade-200: #bbf7d0;
+  --color-jade-300: #86efac;
+  --color-jade-400: #4ade80;
+  --color-jade-500: #22c55e;
+  --color-jade-600: #16a34a;
+  --color-jade-700: #15803d;
+  --color-jade-800: #166534;
+  --color-jade-900: #14532d;
+
+  --color-cream-50: #fefdf8;
+  --color-cream-100: #fdf8ed;
+  --color-cream-200: #f9f0d3;
+  --color-cream-300: #f5e7b6;
+  --color-cream-400: #edd98e;
+  --color-cream-500: #e4c856;
+
+  --color-gold-400: #f5c842;
+  --color-gold-500: #e6b800;
+  --color-gold-600: #c9a000;
+
+  /* ── Semantic Colors ── */
+  --color-brand-primary: var(--color-rose-500);
+  --color-brand-secondary: var(--color-jade-600);
+  --color-brand-accent: var(--color-gold-400);
+
+  /* ── Typography ── */
+  --font-display: 'Playfair Display', Georgia, serif;
+  --font-sans: 'Inter', system-ui, sans-serif;
+
+  /* ── Border Radius ── */
+  --radius-card: 1.25rem;
+  --radius-pill: 9999px;
+
+  /* ── Shadows ── */
+  --shadow-card: 0 4px 24px -4px rgba(0,0,0,0.08), 0 2px 8px -2px rgba(0,0,0,0.04);
+  --shadow-card-hover: 0 12px 40px -8px rgba(0,0,0,0.15), 0 4px 16px -4px rgba(0,0,0,0.08);
+  --shadow-glow-rose: 0 0 40px -8px rgba(244,63,110,0.35);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
+@layer base {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    color-scheme: light;
+  }
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    font-family: var(--font-sans);
+    background-color: var(--color-cream-50);
+    color: #1a0a0f;
+    line-height: 1.6;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-display);
+    line-height: 1.25;
+    letter-spacing: -0.025em;
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-rose-200);
+    border-radius: 9999px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--color-rose-400);
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer utilities {
+  .text-gradient-rose {
+    background: linear-gradient(135deg, var(--color-rose-500), var(--color-rose-700));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .text-gradient-gold {
+    background: linear-gradient(135deg, var(--color-gold-400), var(--color-blush-500));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .bg-floral-pattern {
+    background-image:
+      radial-gradient(circle at 25% 25%, rgba(244,63,110,0.05) 0%, transparent 50%),
+      radial-gradient(circle at 75% 75%, rgba(34,197,94,0.05) 0%, transparent 50%);
+  }
+
+  .glass {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+  }
+
+  .glass-dark {
+    background: rgba(20, 5, 10, 0.7);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+
+  .card-hover {
+    transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.3s ease;
+  }
+  .card-hover:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-card-hover);
+  }
 }
+
+/* ── Google Fonts (loaded in layout) ── */
+/* Playfair Display + Inter injected via next/font */
+
+/* ── Floating Petal Keyframes ── */
+@keyframes float-petal {
+  0%   { transform: translateY(0) rotate(0deg) translateX(0);   opacity: 0.8; }
+  25%  { transform: translateY(-30px) rotate(15deg) translateX(10px); }
+  50%  { transform: translateY(-15px) rotate(-10deg) translateX(-8px); opacity: 0.6; }
+  75%  { transform: translateY(-40px) rotate(20deg) translateX(5px); }
+  100% { transform: translateY(-80px) rotate(5deg) translateX(-5px); opacity: 0; }
+}
+
+@keyframes bloom {
+  0%   { transform: scale(0.8) rotate(-5deg); opacity: 0; }
+  60%  { transform: scale(1.05) rotate(2deg); }
+  100% { transform: scale(1) rotate(0deg); opacity: 1; }
+}
+
+@keyframes shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+.animate-float-petal {
+  animation: float-petal linear infinite;
+}
+
+.animate-bloom {
+  animation: bloom 0.6s cubic-bezier(0.34,1.56,0.64,1) forwards;
+}
+
+/* Skeleton shimmer */
+.skeleton {
+  background: linear-gradient(90deg, var(--color-cream-100) 25%, var(--color-cream-200) 50%, var(--color-cream-100) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.4s ease-in-out infinite;
+  border-radius: 0.5rem;
+}
+
+/* ── Hide Next.js Development Indicator ("N" button) ── */
+nextjs-portal,
+#nextjs-dev-indicator,
+[data-nextjs-dev-indicator],
+[data-nextjs-dev-tools],
+[data-nextjs-indicator],
+[data-nextjs-route-announcer],
+[data-nextjs-toast] {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+

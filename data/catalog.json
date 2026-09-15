@@ -1,0 +1,298 @@
+[
+  {
+    "id": "1",
+    "name": "Rose Wedding Garland",
+    "slug": "rose-wedding-garland",
+    "description": "A stunning garland made with fresh red roses, perfect for weddings and special occasions. Each bloom is handpicked for maximum freshness and beauty.",
+    "price": 650,
+    "category_id": "1",
+    "occasion_id": "1",
+    "flower_type": "Rose",
+    "images": [
+      "/images/garland-rose.jpg"
+    ],
+    "video_url": null,
+    "is_available": true,
+    "is_featured": true,
+    "is_popular": true,
+    "stock_qty": 20,
+    "collection_tag": "Wedding Season",
+    "created_at": "2026-09-14T06:40:09.849Z",
+    "updated_at": "2026-09-14T06:40:09.849Z",
+    "category": {
+      "id": "1",
+      "name": "Wedding",
+      "slug": "wedding",
+      "image_url": null,
+      "display_order": 1,
+      "is_active": true
+    },
+    "occasion": {
+      "id": "1",
+      "name": "Wedding",
+      "slug": "wedding",
+      "icon": "💒",
+      "display_order": 1,
+      "is_active": true
+    }
+  },
+  {
+    "id": "2",
+    "name": "Jasmine Pooja Garland",
+    "slug": "jasmine-pooja-garland",
+    "description": "Fresh jasmine garland with divine fragrance, ideal for daily pooja and temple offerings. The pure white blossoms bring serenity and peace.",
+    "price": 450,
+    "category_id": "2",
+    "occasion_id": "2",
+    "flower_type": "Jasmine",
+    "images": [
+      "/images/garland-jasmine.jpg"
+    ],
+    "video_url": null,
+    "is_available": true,
+    "is_featured": true,
+    "is_popular": true,
+    "stock_qty": 30,
+    "collection_tag": null,
+    "created_at": "2026-09-14T06:40:09.849Z",
+    "updated_at": "2026-09-14T06:40:09.849Z",
+    "category": {
+      "id": "2",
+      "name": "Pooja",
+      "slug": "pooja",
+      "image_url": null,
+      "display_order": 2,
+      "is_active": true
+    },
+    "occasion": {
+      "id": "2",
+      "name": "Pooja",
+      "slug": "pooja",
+      "icon": "🪔",
+      "display_order": 2,
+      "is_active": true
+    }
+  },
+  {
+    "id": "3",
+    "name": "Grand Wedding Garland",
+    "slug": "grand-wedding-garland",
+    "description": "A majestic double-strand garland combining roses, marigolds, and jasmine. Perfect for the main couple at weddings — truly unforgettable.",
+    "price": 1200,
+    "category_id": "1",
+    "occasion_id": "1",
+    "flower_type": "Mixed",
+    "images": [
+      "/images/garland-grand.jpg"
+    ],
+    "video_url": null,
+    "is_available": true,
+    "is_featured": true,
+    "is_popular": false,
+    "stock_qty": 15,
+    "collection_tag": "Wedding Season",
+    "created_at": "2026-09-14T06:40:09.849Z",
+    "updated_at": "2026-09-14T06:40:09.849Z",
+    "category": {
+      "id": "1",
+      "name": "Wedding",
+      "slug": "wedding",
+      "image_url": null,
+      "display_order": 1,
+      "is_active": true
+    },
+    "occasion": {
+      "id": "1",
+      "name": "Wedding",
+      "slug": "wedding",
+      "icon": "💒",
+      "display_order": 1,
+      "is_active": true
+    }
+  },
+  {
+    "id": "4",
+    "name": "Marigold Temple Garland",
+    "slug": "marigold-temple-garland",
+    "description": "Vibrant golden marigold garland for temple worship. Freshly strung daily to ensure maximum fragrance and color.",
+    "price": 280,
+    "category_id": "3",
+    "occasion_id": "5",
+    "flower_type": "Marigold",
+    "images": [
+      "/images/garland-marigold.jpg"
+    ],
+    "video_url": null,
+    "is_available": true,
+    "is_featured": false,
+    "is_popular": true,
+    "stock_qty": 50,
+    "collection_tag": null,
+    "created_at": "2026-09-14T06:40:09.849Z",
+    "updated_at": "2026-09-14T06:40:09.849Z",
+    "category": {
+      "id": "3",
+      "name": "Temple",
+      "slug": "temple",
+      "image_url": null,
+      "display_order": 3,
+      "is_active": true
+    },
+    "occasion": {
+      "id": "5",
+      "name": "Temple",
+      "slug": "temple",
+      "icon": "🛕",
+      "display_order": 5,
+      "is_active": true
+    }
+  },
+  {
+    "id": "7",
+    "name": "Chrysanthemum Function Garland",
+    "slug": "chrysanthemum-function-garland",
+    "description": "Beautiful white chrysanthemum garland perfect for felicitation ceremonies, cultural programs, and formal functions.",
+    "price": 380,
+    "category_id": "6",
+    "occasion_id": "3",
+    "flower_type": "Chrysanthemum",
+    "images": [
+      "/images/garland-chrysanthemum.jpg"
+    ],
+    "video_url": null,
+    "is_available": true,
+    "is_featured": false,
+    "is_popular": true,
+    "stock_qty": 40,
+    "collection_tag": null,
+    "created_at": "2026-09-14T06:40:09.849Z",
+    "updated_at": "2026-09-14T06:40:09.849Z",
+    "category": {
+      "id": "6",
+      "name": "Function",
+      "slug": "function",
+      "image_url": null,
+      "display_order": 6,
+      "is_active": true
+    },
+    "occasion": {
+      "id": "3",
+      "name": "Function",
+      "slug": "function",
+      "icon": "🎉",
+      "display_order": 3,
+      "is_active": true
+    }
+  },
+  {
+    "id": "8",
+    "name": "Kanakambaram Pooja Garland",
+    "slug": "kanakambaram-pooja-garland",
+    "description": "Traditional orange kanakambaram flower garland — a classic offering with deep cultural significance in South Indian households.",
+    "price": 320,
+    "category_id": "2",
+    "occasion_id": "2",
+    "flower_type": "Kanakambaram",
+    "images": [
+      "/images/garland-kanakambaram.jpg"
+    ],
+    "video_url": null,
+    "is_available": true,
+    "is_featured": false,
+    "is_popular": false,
+    "stock_qty": 35,
+    "collection_tag": null,
+    "created_at": "2026-09-14T06:40:09.849Z",
+    "updated_at": "2026-09-14T06:40:09.849Z",
+    "category": {
+      "id": "2",
+      "name": "Pooja",
+      "slug": "pooja",
+      "image_url": null,
+      "display_order": 2,
+      "is_active": true
+    },
+    "occasion": {
+      "id": "2",
+      "name": "Pooja",
+      "slug": "pooja",
+      "icon": "🪔",
+      "display_order": 2,
+      "is_active": true
+    }
+  },
+  {
+    "id": "9",
+    "name": "Royal Bridal Garland Set",
+    "slug": "royal-bridal-garland-set",
+    "description": "An exquisite bridal garland set with fragrant roses, jasmine, and tuberose. Two matching garlands for bride and groom, beautifully crafted.",
+    "price": 2200,
+    "category_id": "1",
+    "occasion_id": "1",
+    "flower_type": "Mixed",
+    "images": [
+      "/images/garland-bridal.jpg"
+    ],
+    "video_url": null,
+    "is_available": true,
+    "is_featured": true,
+    "is_popular": false,
+    "stock_qty": 5,
+    "collection_tag": "Wedding Season",
+    "created_at": "2026-09-14T06:40:09.849Z",
+    "updated_at": "2026-09-14T06:40:09.849Z",
+    "category": {
+      "id": "1",
+      "name": "Wedding",
+      "slug": "wedding",
+      "image_url": null,
+      "display_order": 1,
+      "is_active": true
+    },
+    "occasion": {
+      "id": "1",
+      "name": "Wedding",
+      "slug": "wedding",
+      "icon": "💒",
+      "display_order": 1,
+      "is_active": true
+    }
+  },
+  {
+    "id": "10",
+    "name": "Tuberose Special Garland",
+    "slug": "tuberose-special-garland",
+    "description": "Luxurious tuberose garland with an intoxicating fragrance. Perfect for special occasions when you want to create an unforgettable impression.",
+    "price": 890,
+    "category_id": "6",
+    "occasion_id": "7",
+    "flower_type": "Tuberose",
+    "images": [
+      "/images/garland-tuberose.jpg"
+    ],
+    "video_url": null,
+    "is_available": true,
+    "is_featured": false,
+    "is_popular": true,
+    "stock_qty": 12,
+    "collection_tag": null,
+    "created_at": "2026-09-14T06:40:09.849Z",
+    "updated_at": "2026-09-14T06:40:09.849Z",
+    "category": {
+      "id": "6",
+      "name": "Function",
+      "slug": "function",
+      "image_url": null,
+      "display_order": 6,
+      "is_active": true
+    },
+    "occasion": {
+      "id": "7",
+      "name": "Special",
+      "slug": "special",
+      "icon": "🌸",
+      "display_order": 7,
+      "is_active": true
+    }
+  }
+]
