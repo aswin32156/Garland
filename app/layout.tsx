@@ -45,7 +45,7 @@ export default function RootLayout({
         <CatalogInitializer />
         <Navbar />
         <AuthModal />
-        <main>{children}</main>
+        <main className="overflow-x-hidden w-full">{children}</main>
         <Footer />
         <Toaster
           position="top-right"

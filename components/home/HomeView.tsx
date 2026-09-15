@@ -91,7 +91,7 @@ export function HomeView({ initialGarlands }: HomeViewProps) {
   const popularGarlands = currentGarlands.filter((g) => g.is_popular && !g.is_featured && g.is_available).slice(0, 4);
 
   return (
-    <div className="bg-floral-pattern">
+    <div className="bg-floral-pattern overflow-x-hidden w-full max-w-full">
       {/* ── HERO ─────────────────────────────────────────────────────── */}
       <section
         ref={heroRef}
@@ -356,37 +356,40 @@ export function HomeView({ initialGarlands }: HomeViewProps) {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             {/* Visual side */}
             <motion.div
-              initial={{ opacity: 0, x: -40 }}
-              whileInView={{ opacity: 1, x: 0 }}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
               className="relative"
             >
-              <div className="aspect-square rounded-3xl overflow-hidden bg-gradient-to-br from-rose-100 to-jade-100 flex items-center justify-center relative">
-                <div className="text-center">
-                  <div className="text-8xl mb-4">🌸</div>
-                  <p className="font-display text-2xl font-bold text-gray-700">Since 1998</p>
-                  <p className="text-gray-500 text-sm mt-1">Crafting with love</p>
+              <div className="aspect-square rounded-3xl overflow-hidden bg-gradient-to-br from-rose-100 via-pink-50 to-jade-50 flex items-center justify-center relative p-6 border border-rose-100 shadow-sm">
+                <div className="text-center z-10">
+                  <div className="text-6xl sm:text-7xl mb-2">🌸</div>
+                  <p className="font-display text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight">Since 1998</p>
+                  <p className="text-rose-600 text-xs sm:text-sm font-semibold tracking-wide uppercase mt-1">Crafting with love</p>
                 </div>
-                {/* Founder Badge */}
-                <div className="absolute top-6 left-6 bg-white/95 backdrop-blur-xs rounded-2xl px-4 py-2.5 shadow-md border border-rose-100 flex items-center gap-2.5">
-                  <span className="text-xl">🌸</span>
+                {/* Founder Badge - Top Left */}
+                <div className="absolute top-4 sm:top-6 left-4 sm:left-6 bg-white/95 backdrop-blur-xs rounded-2xl px-3.5 py-2 sm:px-4 sm:py-2.5 shadow-md border border-rose-100 flex items-center gap-2.5 z-20">
+                  <span className="text-lg sm:text-xl">🌸</span>
                   <div className="text-left">
                     <p className="text-[10px] font-bold text-rose-500 uppercase tracking-wider">Founder</p>
                     <p className="text-xs font-bold text-gray-900">Saravanan Mani</p>
                   </div>
                 </div>
-                <div className="absolute bottom-6 left-6 bg-white rounded-2xl px-4 py-3 shadow-lg text-center">
-                  <p className="font-bold text-2xl text-jade-600">100%</p>
-                  <p className="text-xs text-gray-500">Fresh daily</p>
+                {/* 100% Fresh Daily Badge - Bottom Right (prevents overlapping center Since 1998 text) */}
+                <div className="absolute bottom-4 sm:bottom-6 right-4 sm:right-6 bg-white/95 backdrop-blur-xs rounded-2xl px-3.5 py-2.5 sm:px-4 sm:py-3 shadow-lg border border-jade-100 text-center z-20">
+                  <p className="font-bold text-xl sm:text-2xl text-jade-600 leading-tight">100%</p>
+                  <p className="text-[11px] sm:text-xs text-gray-500 font-medium">Fresh daily</p>
                 </div>
               </div>
             </motion.div>
 
             {/* Text side */}
             <motion.div
-              initial={{ opacity: 0, x: 40 }}
-              whileInView={{ opacity: 1, x: 0 }}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
             >
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-rose-100 text-rose-600 text-xs font-semibold uppercase tracking-wider mb-4">
                 🌺 Our Story
