@@ -55,13 +55,13 @@ export function Navbar() {
     <>
       <nav
         className={cn(
-          'fixed top-0 left-0 right-0 z-50 transition-all duration-500',
-          scrolled ? 'glass shadow-sm py-3' : 'bg-transparent py-5'
+          'fixed top-0 left-0 right-0 z-50 transition-all duration-300',
+          scrolled || mobileOpen ? 'bg-white/95 backdrop-blur-md shadow-sm py-3' : 'bg-transparent py-4 sm:py-5'
         )}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2 group">
+          <Link href="/" className="flex items-center gap-2 group" onClick={() => setMobileOpen(false)}>
             <div className="w-9 h-9 rounded-full bg-rose-500 flex items-center justify-center shadow-sm group-hover:scale-110 transition-transform">
               <Flower2 className="w-5 h-5 text-white" />
             </div>
@@ -122,7 +122,7 @@ export function Navbar() {
                   <motion.span
                     initial={{ scale: 0 }}
                     animate={{ scale: 1 }}
-                    className="absolute -top-1 -right-1 w-5 h-5 bg-rose-500 text-white text-xs font-bold rounded-full flex items-center justify-center"
+                    className="absolute -top-1 -right-1 w-5 h-5 bg-rose-500 text-white text-xs font-bold rounded-full flex items-center justify-center shadow-xs"
                   >
                     {cartCount > 9 ? '9+' : cartCount}
                   </motion.span>
@@ -206,7 +206,10 @@ export function Navbar() {
             {/* Mobile menu toggle */}
             <button
               onClick={() => setMobileOpen(!mobileOpen)}
-              className="md:hidden flex items-center justify-center w-10 h-10 rounded-xl hover:bg-rose-50 transition-colors"
+              className={cn(
+                "md:hidden flex items-center justify-center w-10 h-10 rounded-xl transition-all",
+                mobileOpen ? "bg-rose-100 text-rose-700" : "hover:bg-rose-50 text-gray-700"
+              )}
               aria-label="Menu"
             >
               {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
@@ -214,45 +217,131 @@ export function Navbar() {
           </div>
         </div>
 
-        {/* Mobile Menu */}
+        {/* Mobile Dropdown Menu */}
         <AnimatePresence>
           {mobileOpen && (
             <motion.div
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
-              className="md:hidden glass border-t border-white/30 mt-2 px-4 py-4 flex flex-col gap-3"
+              transition={{ duration: 0.2 }}
+              className="md:hidden bg-white/98 backdrop-blur-xl border-t border-rose-100 shadow-2xl px-4 py-5 flex flex-col gap-3 mt-3"
             >
-              {navLinks.map((link) => (
-                <Link key={link.href} href={link.href} onClick={() => setMobileOpen(false)} className="text-sm font-medium text-gray-800 hover:text-rose-500 py-1.5 transition-colors">
-                  {link.label}
-                </Link>
-              ))}
+              {/* Navigation Links */}
+              <div className="grid grid-cols-2 gap-2 pb-2">
+                {navLinks.map((link) => (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    onClick={() => setMobileOpen(false)}
+                    className="text-sm font-semibold text-gray-800 hover:text-rose-600 hover:bg-rose-50/80 px-3 py-2.5 rounded-xl transition-colors flex items-center gap-2 border border-gray-100"
+                  >
+                    <span>{link.label}</span>
+                  </Link>
+                ))}
+              </div>
 
+              {/* User Account / Role Section */}
               {user ? (
-                <>
-                  <div className="flex items-center gap-2 py-1.5 border-t border-gray-100">
-                    <div className="w-8 h-8 rounded-full bg-rose-500 flex items-center justify-center text-white text-xs font-bold">
-                      {user.full_name.split(' ').map((n) => n[0]).join('').slice(0, 2).toUpperCase()}
+                <div className="flex flex-col gap-2.5 pt-3 border-t border-gray-100">
+                  {/* User Profile Card */}
+                  <div className="flex items-center justify-between p-3 rounded-2xl bg-gray-50 border border-gray-100">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-full bg-rose-500 flex items-center justify-center text-white text-sm font-bold shadow-xs">
+                        {user.full_name.split(' ').map((n) => n[0]).join('').slice(0, 2).toUpperCase()}
+                      </div>
+                      <div>
+                        <p className="text-sm font-bold text-gray-900 leading-tight">{user.full_name}</p>
+                        <p className="text-[11px] text-gray-500 leading-tight mt-0.5 truncate max-w-[170px]">{user.email}</p>
+                      </div>
                     </div>
-                    <div>
-                      <p className="text-sm font-semibold text-gray-800">{user.full_name}</p>
-                      {roleCfg && <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full ${roleCfg.color}`}>{roleCfg.label}</span>}
-                    </div>
+                    {roleCfg && (
+                      <span className={`text-xs font-bold px-2.5 py-1 rounded-full shrink-0 shadow-2xs ${roleCfg.color}`}>
+                        {roleCfg.label}
+                      </span>
+                    )}
                   </div>
+
+                  {/* Primary Role-Based Dashboard Button */}
                   {roleCfg && (
-                    <Link href={roleCfg.dashLink} onClick={() => setMobileOpen(false)} className="text-sm font-semibold text-rose-500">
-                      → Dashboard
+                    <Link
+                      href={roleCfg.dashLink}
+                      onClick={() => setMobileOpen(false)}
+                      className="flex items-center justify-between p-3.5 rounded-2xl bg-gradient-to-r from-rose-500 to-rose-600 text-white shadow-md hover:from-rose-600 hover:to-rose-700 transition-all font-semibold text-sm group"
+                    >
+                      <div className="flex items-center gap-2.5">
+                        <div className="w-8 h-8 rounded-xl bg-white/20 flex items-center justify-center text-white">
+                          <roleCfg.icon className="w-4 h-4" />
+                        </div>
+                        <div className="text-left">
+                          <p className="text-xs font-medium text-rose-100 leading-none">
+                            {user.role === 'ADMIN' ? 'Control Panel' : user.role === 'OWNER' ? 'Shop Management' : 'My Account'}
+                          </p>
+                          <p className="text-sm font-bold leading-tight mt-0.5">
+                            {user.role === 'ADMIN'
+                              ? 'Admin Dashboard'
+                              : user.role === 'OWNER'
+                              ? 'Owner Dashboard'
+                              : 'My Orders & Pickups'}
+                          </p>
+                        </div>
+                      </div>
+                      <span className="text-base group-hover:translate-x-1 transition-transform">→</span>
                     </Link>
                   )}
-                  <button onClick={handleLogout} className="flex items-center gap-1.5 text-sm text-red-500 font-semibold">
-                    <LogOut className="w-4 h-4" /> Sign Out
-                  </button>
-                </>
+
+                  {/* Additional Role Quick Links */}
+                  <div className="grid grid-cols-2 gap-2">
+                    {user.role === 'CUSTOMER' && (
+                      <Link
+                        href="/wishlist"
+                        onClick={() => setMobileOpen(false)}
+                        className="flex items-center justify-center gap-2 p-2.5 rounded-xl border border-gray-200 text-xs font-semibold text-gray-700 hover:bg-rose-50 hover:text-rose-600 transition-colors"
+                      >
+                        <Heart className="w-4 h-4 text-rose-500" />
+                        <span>Wishlist ({wishlistCount})</span>
+                      </Link>
+                    )}
+
+                    {user.role === 'OWNER' && (
+                      <Link
+                        href="/notifications"
+                        onClick={() => setMobileOpen(false)}
+                        className="flex items-center justify-center gap-2 p-2.5 rounded-xl border border-gray-200 text-xs font-semibold text-gray-700 hover:bg-rose-50 hover:text-rose-600 transition-colors"
+                      >
+                        <Bell className="w-4 h-4 text-rose-500" />
+                        <span>Alerts {unreadNotifs > 0 && `(${unreadNotifs})`}</span>
+                      </Link>
+                    )}
+
+                    <button
+                      onClick={handleLogout}
+                      className={cn(
+                        "flex items-center justify-center gap-1.5 p-2.5 rounded-xl border border-red-200 bg-red-50 text-xs font-semibold text-red-600 hover:bg-red-100 transition-colors cursor-pointer",
+                        user.role === 'ADMIN' ? "col-span-2" : ""
+                      )}
+                    >
+                      <LogOut className="w-3.5 h-3.5" />
+                      <span>Sign Out</span>
+                    </button>
+                  </div>
+                </div>
               ) : (
                 <div className="flex gap-2 pt-2 border-t border-gray-100">
-                  <Link href="/login" className="flex-1 text-center px-4 py-2 rounded-xl bg-rose-500 text-white text-sm font-semibold" onClick={() => setMobileOpen(false)}>Sign In</Link>
-                  <Link href="/register" className="flex-1 text-center px-4 py-2 rounded-xl border-2 border-rose-500 text-rose-600 text-sm font-semibold" onClick={() => setMobileOpen(false)}>Register</Link>
+                  <Link
+                    href="/login"
+                    className="flex-1 text-center py-2.5 rounded-xl bg-rose-500 text-white text-sm font-semibold shadow-sm hover:bg-rose-600 transition-colors"
+                    onClick={() => setMobileOpen(false)}
+                  >
+                    Sign In
+                  </Link>
+                  <Link
+                    href="/register"
+                    className="flex-1 text-center py-2.5 rounded-xl border-2 border-rose-500 text-rose-600 text-sm font-semibold hover:bg-rose-50 transition-colors"
+                    onClick={() => setMobileOpen(false)}
+                  >
+                    Register
+                  </Link>
                 </div>
               )}
             </motion.div>
@@ -260,9 +349,22 @@ export function Navbar() {
         </AnimatePresence>
       </nav>
 
-      {/* Backdrop for profile dropdown */}
+      {/* Backdrop overlay for mobile menu */}
+      <AnimatePresence>
+        {mobileOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/40 z-40 backdrop-blur-xs md:hidden"
+            onClick={() => setMobileOpen(false)}
+          />
+        )}
+      </AnimatePresence>
+
+      {/* Backdrop for desktop profile dropdown */}
       {profileOpen && (
-        <div className="fixed inset-0 z-40" onClick={() => setProfileOpen(false)} />
+        <div className="fixed inset-0 z-40 hidden md:block" onClick={() => setProfileOpen(false)} />
       )}
     </>
   );

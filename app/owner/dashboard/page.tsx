@@ -659,19 +659,19 @@ export default function OwnerDashboard() {
   return (
     <div className="min-h-screen bg-gray-50 pt-20 pb-16">
       {/* ── Top Header ── */}
-      <div className="bg-white border-b border-gray-100 shadow-xs px-4 py-4 sticky top-16 z-30">
-        <div className="max-w-6xl mx-auto flex items-center justify-between">
+      <div className="bg-white border-b border-gray-100 shadow-xs px-4 py-3.5 sm:py-4 sticky top-16 z-30">
+        <div className="max-w-6xl mx-auto flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div>
-            <div className="flex items-center gap-2">
-              <h1 className="font-display text-2xl font-bold text-gray-900">Owner Dashboard</h1>
+            <div className="flex items-center gap-2 flex-wrap">
+              <h1 className="font-display text-xl sm:text-2xl font-bold text-gray-900">Owner Dashboard</h1>
               <span className="px-2.5 py-0.5 rounded-full bg-rose-100 text-rose-800 text-xs font-bold">
                 Store Live
               </span>
             </div>
-            <p className="text-sm text-gray-500">Live Order Fulfillment & Real-Time Customer Purchases</p>
+            <p className="text-xs sm:text-sm text-gray-500">Live Order Fulfillment & Real-Time Customer Purchases</p>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center justify-between sm:justify-end gap-3">
             {/* Notification Bell with interactive panel */}
             <div className="relative" ref={notifPanelRef}>
               <button
@@ -702,7 +702,7 @@ export default function OwnerDashboard() {
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0, y: 10, scale: 0.95 }}
                     transition={{ duration: 0.2 }}
-                    className="absolute right-0 mt-3 w-84 sm:w-96 bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden z-50 text-left"
+                    className="absolute right-0 mt-3 w-[calc(100vw-32px)] sm:w-96 max-w-sm bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden z-50 text-left"
                   >
                     {/* Panel Header */}
                     <div className="p-4 bg-gradient-to-r from-rose-50 to-pink-50 border-b border-rose-100/60">
@@ -1203,7 +1203,7 @@ export default function OwnerDashboard() {
                       </div>
 
                       {/* Quick action buttons */}
-                      <div className="flex items-center gap-2 justify-end">
+                      <div className="flex flex-wrap items-center gap-2 justify-start sm:justify-end">
                         {order.status === 'NEW' && (
                           <button
                             onClick={() => handleUpdateOrderStatus(order.id, order.order_number, 'ACCEPTED')}

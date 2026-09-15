@@ -65,11 +65,19 @@ export default function CartPage() {
   return (
     <div className="min-h-screen pt-24 pb-16">
       <div className="max-w-4xl mx-auto px-4">
-        <div className="flex items-center justify-between mb-8">
-          <h1 className="font-display text-3xl sm:text-4xl font-bold text-gray-900">
-            🛒 My Cart
-          </h1>
-          <Link href="/garlands" className="text-sm text-gray-500 hover:text-rose-500 flex items-center gap-1.5 transition-colors">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6 sm:mb-8">
+          <div>
+            <h1 className="font-display text-2xl sm:text-4xl font-bold text-gray-900 flex items-center gap-2">
+              <span>🛒</span> My Cart
+            </h1>
+            <p className="text-xs sm:text-sm text-gray-500 mt-1">
+              Review your fresh garland pre-orders before selecting pickup
+            </p>
+          </div>
+          <Link
+            href="/garlands"
+            className="text-xs sm:text-sm font-semibold text-rose-600 hover:text-rose-700 bg-rose-50 hover:bg-rose-100 px-3.5 py-2 rounded-xl flex items-center gap-1.5 transition-colors w-fit"
+          >
             <ArrowLeft className="w-4 h-4" /> Continue Shopping
           </Link>
         </div>
@@ -78,48 +86,89 @@ export default function CartPage() {
           {/* ── Cart Items ── */}
           <div className="lg:col-span-2 flex flex-col gap-4">
             <AnimatePresence>
-              {items.map((item) => (
-                <motion.div
-                  key={item.id}
-                  layout
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: 20, height: 0 }}
-                  transition={{ duration: 0.3 }}
-                  className="bg-white rounded-2xl p-4 shadow-[var(--shadow-card)] flex gap-4"
-                >
-                  {/* Thumbnail */}
-                  <div className="w-20 h-20 rounded-xl bg-gradient-to-br from-rose-100 to-cream-200 flex items-center justify-center shrink-0 text-2xl">
-                    🌸
-                  </div>
+              {items.map((item) => {
+                const subtitle = [item.garland.flower_type, item.garland.category?.name]
+                  .filter(Boolean)
+                  .join(' · ');
 
-                  {/* Info */}
-                  <div className="flex-1 min-w-0">
-                    <h3 className="font-semibold text-gray-900 truncate">{item.garland.name}</h3>
-                    <p className="text-xs text-gray-500 mt-0.5">
-                      {item.garland.flower_type} · {item.garland.category?.name}
-                    </p>
-                    <p className="text-sm font-bold text-rose-600 mt-1">{formatPrice(item.garland.price)} each</p>
-                  </div>
+                return (
+                  <motion.div
+                    key={item.id}
+                    layout
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: 20, height: 0 }}
+                    transition={{ duration: 0.3 }}
+                    className="bg-white rounded-2xl p-4 sm:p-5 shadow-[var(--shadow-card)] border border-gray-100 flex flex-col sm:flex-row sm:items-center gap-4"
+                  >
+                    {/* Top Row on Mobile: Thumbnail + Info + Delete button */}
+                    <div className="flex items-start gap-3.5 flex-1 min-w-0">
+                      {/* Thumbnail */}
+                      <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-xl bg-gradient-to-br from-rose-100 to-cream-200 flex items-center justify-center shrink-0 text-2xl shadow-inner overflow-hidden">
+                        {item.garland.images?.[0] ? (
+                          <img
+                            src={item.garland.images[0]}
+                            alt={item.garland.name}
+                            className="w-full h-full object-cover"
+                          />
+                        ) : (
+                          '🌸'
+                        )}
+                      </div>
 
-                  {/* Controls */}
-                  <div className="flex flex-col items-end justify-between shrink-0">
-                    <button
-                      onClick={() => removeItem(item.id)}
-                      className="text-gray-400 hover:text-red-500 transition-colors p-1"
-                      aria-label="Remove"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </button>
-                    <div className="flex items-center gap-3">
-                      <QuantityControl id={item.id} quantity={item.quantity} />
-                      <span className="font-bold text-gray-900 min-w-[70px] text-right text-sm">
-                        {formatPrice(item.garland.price * item.quantity)}
-                      </span>
+                      {/* Info */}
+                      <div className="flex-1 min-w-0 pr-1">
+                        <h3 className="font-semibold text-gray-900 text-sm sm:text-base leading-snug line-clamp-1">
+                          {item.garland.name}
+                        </h3>
+                        {subtitle && (
+                          <p className="text-xs text-gray-500 mt-0.5 line-clamp-1">
+                            {subtitle}
+                          </p>
+                        )}
+                        <p className="text-xs sm:text-sm font-bold text-rose-600 mt-1">
+                          {formatPrice(item.garland.price)}{' '}
+                          <span className="text-[11px] font-normal text-gray-500">each</span>
+                        </p>
+                      </div>
+
+                      {/* Mobile Delete Button */}
+                      <button
+                        onClick={() => removeItem(item.id)}
+                        className="sm:hidden text-gray-400 hover:text-red-500 hover:bg-red-50 p-1.5 rounded-lg transition-colors shrink-0 cursor-pointer"
+                        aria-label="Remove item"
+                        title="Remove item"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
                     </div>
-                  </div>
-                </motion.div>
-              ))}
+
+                    {/* Bottom Row on Mobile / Right Column on Desktop */}
+                    <div className="flex items-center justify-between sm:justify-end gap-4 pt-3 sm:pt-0 border-t sm:border-t-0 border-gray-100 shrink-0">
+                      <QuantityControl id={item.id} quantity={item.quantity} />
+
+                      <div className="flex items-center gap-3">
+                        <div className="text-right">
+                          <span className="text-[10px] text-gray-400 block sm:hidden">Total</span>
+                          <span className="font-bold text-gray-900 min-w-[75px] text-right text-base sm:text-sm font-display">
+                            {formatPrice(item.garland.price * item.quantity)}
+                          </span>
+                        </div>
+
+                        {/* Desktop Delete Button */}
+                        <button
+                          onClick={() => removeItem(item.id)}
+                          className="hidden sm:flex text-gray-400 hover:text-red-500 hover:bg-red-50 p-1.5 rounded-lg transition-colors cursor-pointer"
+                          aria-label="Remove item"
+                          title="Remove item"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
+                    </div>
+                  </motion.div>
+                );
+              })}
             </AnimatePresence>
           </div>
 

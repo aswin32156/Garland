@@ -388,11 +388,11 @@ export function AdminDashboardView({ initialGarlands }: AdminDashboardViewProps)
   return (
     <div className="min-h-screen bg-gray-50 pt-20">
       {/* Header */}
-      <div className="bg-white border-b border-gray-100 px-4 py-4 sticky top-16 z-30">
-        <div className="max-w-6xl mx-auto flex items-center justify-between">
+      <div className="bg-white border-b border-gray-100 px-4 py-3.5 sm:py-4 sticky top-16 z-30">
+        <div className="max-w-6xl mx-auto flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div>
-            <h1 className="font-display text-2xl font-bold text-gray-900">Admin Dashboard</h1>
-            <p className="text-sm text-gray-500">Manage catalog & real-time customer payments</p>
+            <h1 className="font-display text-xl sm:text-2xl font-bold text-gray-900">Admin Dashboard</h1>
+            <p className="text-xs sm:text-sm text-gray-500">Manage catalog & real-time customer payments</p>
           </div>
 
           <div className="flex items-center gap-3">
@@ -425,7 +425,7 @@ export function AdminDashboardView({ initialGarlands }: AdminDashboardViewProps)
         </div>
 
         {/* Tabs */}
-        <div className="flex gap-2 mb-6 flex-wrap">
+        <div className="flex gap-2 mb-6 overflow-x-auto pb-2 scrollbar-hide sm:flex-wrap">
           {([
             { key: 'garlands', label: '🌸 Garlands' },
             {
@@ -441,9 +441,9 @@ export function AdminDashboardView({ initialGarlands }: AdminDashboardViewProps)
               key={tab.key}
               onClick={() => setActiveTab(tab.key)}
               className={cn(
-                'px-4 py-2 rounded-full text-sm font-semibold transition-all',
+                'px-4 py-2 rounded-full text-xs sm:text-sm font-semibold transition-all whitespace-nowrap shrink-0',
                 activeTab === tab.key
-                  ? 'bg-rose-500 text-white'
+                  ? 'bg-rose-500 text-white shadow-xs'
                   : 'bg-white text-gray-600 border border-gray-200 hover:border-rose-300'
               )}
             >
