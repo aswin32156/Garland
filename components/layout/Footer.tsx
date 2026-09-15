@@ -94,14 +94,7 @@ export function Footer() {
               </li>
             </ul>
 
-            <a
-              href="tel:+919344676293"
-              className="mt-4 inline-flex items-center justify-center gap-2 px-3.5 py-2 rounded-xl bg-rose-500 hover:bg-rose-600 text-white text-xs font-bold transition-all shadow-sm w-full"
-            >
-              <Phone className="w-3.5 h-3.5" /> Call Store: +91 93446 76293
-            </a>
-
-            <div className="mt-3 p-3 rounded-xl bg-white/5 border border-white/10">
+            <div className="mt-4 p-3 rounded-xl bg-white/5 border border-white/10">
               <p className="text-xs text-gray-400 font-medium">Store Hours</p>
               <p className="text-xs text-gray-300 mt-1">Mon – Sat: 8 AM – 8 PM</p>
               <p className="text-xs text-gray-300">Sunday: 8 AM – 8 PM</p>
