@@ -26,44 +26,31 @@ export default function NotificationsPage() {
   const { notifications, markAsRead, markAllAsRead, clearAll } = useNotificationStore();
   const [filter, setFilter] = useState<'ALL' | 'UNREAD'>('ALL');
 
-  const filteredNotifs = filter === 'ALL'
-    ? notifications
-    : notifications.filter((n) => !n.is_read);
+  const validOrderNotifs = notifications.filter(
+    (n) =>
+      (n.type === 'NEW_ORDER' || n.type === 'PAYMENT_SUCCESS') &&
+      !['MG1025', 'MG1026', 'MG1027', 'MG1028'].includes(n.order_number) &&
+      !['notif-1', 'notif-2', 'notif-3', 'notif-4'].includes(n.id)
+  );
 
-  const unreadCount = notifications.filter((n) => !n.is_read).length;
+  const filteredNotifs = filter === 'ALL'
+    ? validOrderNotifs
+    : validOrderNotifs.filter((n) => !n.is_read);
+
+  const unreadCount = validOrderNotifs.filter((n) => !n.is_read).length;
 
   function getIcon(type: DashboardNotification['type']) {
-    switch (type) {
-      case 'PAYMENT_SUCCESS':
-        return <CreditCard className="w-5 h-5 text-emerald-600" />;
-      case 'NEW_ORDER':
-        return <ShoppingBag className="w-5 h-5 text-blue-600" />;
-      case 'PREPARING':
-        return <Clock className="w-5 h-5 text-orange-600" />;
-      case 'READY_FOR_PICKUP':
-        return <Package className="w-5 h-5 text-emerald-600" />;
-      case 'COLLECTED':
-        return <CheckCircle2 className="w-5 h-5 text-gray-500" />;
-      default:
-        return <Bell className="w-5 h-5 text-rose-500" />;
+    if (type === 'PAYMENT_SUCCESS') {
+      return <CreditCard className="w-5 h-5 text-emerald-600" />;
     }
+    return <ShoppingBag className="w-5 h-5 text-rose-600" />;
   }
 
   function getBadgeColor(type: DashboardNotification['type']) {
-    switch (type) {
-      case 'PAYMENT_SUCCESS':
-        return 'bg-emerald-50 text-emerald-700 border-emerald-200';
-      case 'NEW_ORDER':
-        return 'bg-blue-50 text-blue-700 border-blue-200';
-      case 'PREPARING':
-        return 'bg-orange-50 text-orange-700 border-orange-200';
-      case 'READY_FOR_PICKUP':
-        return 'bg-emerald-50 text-emerald-700 border-emerald-200';
-      case 'COLLECTED':
-        return 'bg-gray-50 text-gray-600 border-gray-200';
-      default:
-        return 'bg-rose-50 text-rose-700 border-rose-200';
+    if (type === 'PAYMENT_SUCCESS') {
+      return 'bg-emerald-50 text-emerald-700 border-emerald-200';
     }
+    return 'bg-rose-50 text-rose-700 border-rose-200';
   }
 
   if (!user || user.role !== 'OWNER') {
@@ -157,7 +144,7 @@ export default function NotificationsPage() {
                 : 'bg-white text-gray-600 border border-gray-200 hover:border-rose-200'
             }`}
           >
-            All ({notifications.length})
+            All ({validOrderNotifs.length})
           </button>
           <button
             onClick={() => setFilter('UNREAD')}
@@ -178,9 +165,9 @@ export default function NotificationsPage() {
               <div className="w-14 h-14 rounded-full bg-rose-50 flex items-center justify-center mx-auto mb-3 text-2xl">
                 🌸
               </div>
-              <p className="font-semibold text-gray-800 mb-1">No notifications</p>
+              <p className="font-semibold text-gray-800 mb-1">No order notifications</p>
               <p className="text-sm text-gray-400">
-                {filter === 'UNREAD' ? 'No unread notifications found.' : 'You have no notifications yet.'}
+                {filter === 'UNREAD' ? 'No unread order notifications found.' : 'You will receive real-time notifications here as soon as a customer places an order.'}
               </p>
             </div>
           ) : (

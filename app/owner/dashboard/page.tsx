@@ -638,9 +638,16 @@ export default function OwnerDashboard() {
     }
   }
 
+  const validOrderNotifs = notifications.filter(
+    (n) =>
+      (n.type === 'NEW_ORDER' || n.type === 'PAYMENT_SUCCESS') &&
+      !['MG1025', 'MG1026', 'MG1027', 'MG1028'].includes(n.order_number) &&
+      !['notif-1', 'notif-2', 'notif-3', 'notif-4'].includes(n.id)
+  );
+
   const displayedNotifications = notifFilter === 'ALL'
-    ? notifications
-    : notifications.filter((n) => !n.is_read);
+    ? validOrderNotifs
+    : validOrderNotifs.filter((n) => !n.is_read);
 
   return (
     <div className="min-h-screen bg-gray-50 pt-20 pb-16">
@@ -737,7 +744,7 @@ export default function OwnerDashboard() {
                                 : 'bg-white/80 text-gray-600 hover:bg-white'
                             )}
                           >
-                            All ({notifications.length})
+                            All ({validOrderNotifs.length})
                           </button>
                           <button
                             onClick={() => setNotifFilter('UNREAD')}
@@ -786,16 +793,16 @@ export default function OwnerDashboard() {
                             <div
                               className={cn(
                                 'w-8 h-8 rounded-xl flex items-center justify-center shrink-0 text-xs shadow-xs',
-                                n.type === 'NEW_ORDER' ? 'bg-blue-100 text-blue-700' :
-                                n.type === 'PREPARING' ? 'bg-orange-100 text-orange-700' :
-                                n.type === 'READY_FOR_PICKUP' ? 'bg-jade-100 text-jade-700' :
-                                'bg-emerald-100 text-emerald-700'
+                                n.type === 'NEW_ORDER'
+                                  ? 'bg-rose-100 text-rose-700'
+                                  : 'bg-emerald-100 text-emerald-700'
                               )}
                             >
-                              {n.type === 'NEW_ORDER' ? <ShoppingBag className="w-4 h-4" /> :
-                               n.type === 'PREPARING' ? <Clock className="w-4 h-4" /> :
-                               n.type === 'READY_FOR_PICKUP' ? <Package className="w-4 h-4" /> :
-                               <CheckCircle2 className="w-4 h-4" />}
+                              {n.type === 'NEW_ORDER' ? (
+                                <ShoppingBag className="w-4 h-4" />
+                              ) : (
+                                <CreditCard className="w-4 h-4" />
+                              )}
                             </div>
 
                             <div className="flex-1 min-w-0">

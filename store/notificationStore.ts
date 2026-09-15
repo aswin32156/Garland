@@ -4,7 +4,7 @@ import { persist } from 'zustand/middleware';
 export interface DashboardNotification {
   id: string;
   order_number: string;
-  type: 'NEW_ORDER' | 'PAYMENT_SUCCESS' | 'PREPARING' | 'READY_FOR_PICKUP' | 'COLLECTED';
+  type: 'NEW_ORDER' | 'PAYMENT_SUCCESS';
   title: string;
   message: string;
   customer_name: string;
@@ -28,81 +28,41 @@ interface NotificationState {
   clearAll: () => void;
 }
 
-const INITIAL_NOTIFICATIONS: DashboardNotification[] = [
-  {
-    id: 'notif-1',
-    order_number: 'MG1025',
-    type: 'PAYMENT_SUCCESS',
-    title: 'Payment Received — ₹1,750',
-    message: 'Priya Subramaniam paid online for 2x Rose Wedding Garland & 1x Jasmine Garland',
-    customer_name: 'Priya Subramaniam',
-    amount: 1750,
-    time: '5 mins ago',
-    is_read: false,
-    order_id: '1',
-    pickup_time: '17:00 - 18:00',
-    payment_id: 'pay_rzp_99214',
-    payment_status: 'PAID',
-  },
-  {
-    id: 'notif-2',
-    order_number: 'MG1026',
-    type: 'PAYMENT_SUCCESS',
-    title: 'Payment Received — ₹1,200',
-    message: 'Rajesh Kumar paid online for Grand Wedding Garland',
-    customer_name: 'Rajesh Kumar',
-    amount: 1200,
-    time: '45 mins ago',
-    is_read: false,
-    order_id: '2',
-    pickup_time: '11:00 - 12:00',
-    payment_id: 'pay_rzp_99215',
-    payment_status: 'PAID',
-  },
-  {
-    id: 'notif-3',
-    order_number: 'MG1027',
-    type: 'PREPARING',
-    title: 'Order in Preparation',
-    message: 'Meena Krishnan · 3x Marigold & 2x Mixed Garland',
-    customer_name: 'Meena Krishnan',
-    amount: 1200,
-    time: '2 hours ago',
-    is_read: true,
-    order_id: '3',
-    pickup_time: '09:00 - 10:00',
-  },
-  {
-    id: 'notif-4',
-    order_number: 'MG1028',
-    type: 'READY_FOR_PICKUP',
-    title: 'Ready for Customer Pickup',
-    message: 'Anand Venkat · 5x Jasmine Pooja Garland',
-    customer_name: 'Anand Venkat',
-    amount: 2250,
-    time: '4 hours ago',
-    is_read: true,
-    order_id: '4',
-    pickup_time: '10:00 - 11:00',
-  },
-];
+// Only real placed orders are kept - no mock unwanted notifications
+function isOrderNotification(n: any): boolean {
+  if (!n) return false;
+  const isOrderType = n.type === 'NEW_ORDER' || n.type === 'PAYMENT_SUCCESS';
+  const isMock =
+    ['MG1025', 'MG1026', 'MG1027', 'MG1028'].includes(n.order_number) ||
+    ['notif-1', 'notif-2', 'notif-3', 'notif-4'].includes(n.id);
+  return isOrderType && !isMock;
+}
 
 export const useNotificationStore = create<NotificationState>()(
   persist(
     (set, get) => ({
-      notifications: INITIAL_NOTIFICATIONS,
+      notifications: [],
 
-      unreadCount: () => get().notifications.filter((n) => !n.is_read).length,
+      unreadCount: () =>
+        get().notifications.filter((n) => isOrderNotification(n) && !n.is_read).length,
 
       addNotification: (n) => {
+        // Owner only receives notifications for new orders placed
+        if (n.type !== 'NEW_ORDER' && n.type !== 'PAYMENT_SUCCESS') return;
+
         const newNotif: DashboardNotification = {
           ...n,
+          type: n.type as 'NEW_ORDER' | 'PAYMENT_SUCCESS',
           id: `notif-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
           is_read: false,
           time: 'Just now',
         };
+
         set((state) => ({
-          notifications: [newNotif, ...state.notifications],
+          notifications: [
+            newNotif,
+            ...state.notifications.filter((prev) => isOrderNotification(prev)),
+          ],
         }));
       },
 
@@ -126,6 +86,14 @@ export const useNotificationStore = create<NotificationState>()(
     }),
     {
       name: 'malligai-notifications-store',
+      version: 3,
+      migrate: (persistedState: any) => {
+        const cleaned = (persistedState?.notifications || []).filter(isOrderNotification);
+        return {
+          ...persistedState,
+          notifications: cleaned,
+        };
+      },
     }
   )
 );
