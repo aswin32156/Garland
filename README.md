@@ -18,7 +18,7 @@ Malligai Garlands is a modern, full-stack e-commerce web application designed fo
   - Zero unpaid orders guarantee — transaction auto-cancels if payment is not completed.
 - **Order Confirmation & Digital Receipt**:
   - Printable receipt with live counter pickup verification QR code.
-  - Direct 1-tap **Call (+91 93446 76293)** and **WhatsApp** support buttons for order inquiries.
+  - Direct 1-tap **Call** and **WhatsApp** support buttons for order inquiries.
 
 ### 🏪 Shop Owner Dashboard (`/owner/dashboard`)
 - **Instant Real-Time Order Alerts**: Web Audio dual-tone sound chime and live toast notifications triggered the second a customer completes payment.
@@ -98,14 +98,6 @@ Open [http://localhost:3000](http://localhost:3000) in your browser to view the 
 4. Add the environment variables from your `.env.local` file.
 5. Click **Deploy**. Vercel will build and publish your website with free SSL!
 
----
-
-## 📞 Contact & Support
-
-**Malligai Garlands (மல்லிகை மாலைகள்)**  
-📍 Gandhi Market, Trichy, Tamil Nadu, India  
-📞 Phone: **+91 93446 76293**  
-💬 WhatsApp: **+91 93446 76293**  
 
 ---
 
