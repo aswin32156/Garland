@@ -1,36 +1,113 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🌸 Malligai Garlands (மல்லிகை மாலைகள்)
 
-## Getting Started
+> **Fresh Handcrafted Flower Garlands — Pre-Order Online for Temple, Weddings & Special Celebrations.**
 
-First, run the development server:
+Malligai Garlands is a modern, full-stack e-commerce web application designed for traditional flower garland pre-ordering, custom pickup scheduling, instant real-time UPI/Razorpay payments, and seamless order management for both customers and shop owners.
 
+---
+
+## ✨ Features
+
+### 🛍️ Customer Experience
+- **Curated Garland Catalog**: High-resolution gallery featuring Wedding, Temple, Pooja, Festival, Birthday, and VIP reception garlands with flower details (Jasmine, Rose, Marigold, Lotus, Tuberose).
+- **Full-Picture Inspection**: Click-to-maximize garland lightbox with zoom controls up to 300% to view uncropped petal arrangements and knotting craftsmanship.
+- **Flexible Store Pickup Scheduling**: Select 2-hour standard intervals (8:00 AM to 8:00 PM) or specify any custom pickup time range with unlimited order availability.
+- **Real-Time UPI & Razorpay Payments**:
+  - Dynamic on-screen UPI QR Code with pre-filled amount payload for Google Pay, PhonePe, and Paytm.
+  - Razorpay gateway integration for Credit/Debit Cards (Visa, MasterCard, RuPay) and Net Banking.
+  - Zero unpaid orders guarantee — transaction auto-cancels if payment is not completed.
+- **Order Confirmation & Digital Receipt**:
+  - Printable receipt with live counter pickup verification QR code.
+  - Direct 1-tap **Call (+91 93446 76293)** and **WhatsApp** support buttons for order inquiries.
+
+### 🏪 Shop Owner Dashboard (`/owner/dashboard`)
+- **Instant Real-Time Order Alerts**: Web Audio dual-tone sound chime and live toast notifications triggered the second a customer completes payment.
+- **"Payment Option Accepted Order" Cards**: Comprehensive customer profiles (name, phone number, WhatsApp link, scheduled pickup time window, and payment reference).
+- **Itemized "What They Bought" Breakdown**: Exact garland thumbnails, quantities, unit prices, subtotal amounts, and custom instructions.
+- **Garland Maximizer & Customer Order History**: Click any ordered garland item to view high-resolution photos and inspect the customer's lifetime order history.
+- **Order Status Tracking**: One-tap fulfillment workflows (`Payment Accepted` → `Preparing Flowers` → `Ready for Pickup` → `Collected`).
+
+### ⚙️ Admin Catalog Management (`/admin/dashboard`)
+- Add, edit, or remove garlands, update pricing, toggle featured products, and monitor store-wide analytics.
+
+---
+
+## 🛠️ Tech Stack
+
+| Layer | Technology |
+|---|---|
+| **Frontend** | [Next.js 16](https://nextjs.org/) (App Router), [React 19](https://react.dev/), [TypeScript](https://www.typescriptlang.org/) |
+| **Styling & UI** | [Tailwind CSS v4](https://tailwindcss.com/), [Framer Motion](https://www.framer.com/motion/), [Lucide Icons](https://lucide.dev/) |
+| **State Management** | [Zustand](https://github.com/pmndrs/zustand) with local storage persistence |
+| **Database & Backend** | [Supabase](https://supabase.com/) (PostgreSQL, Row Level Security, Realtime websockets) |
+| **Payment Gateways** | [Razorpay](https://razorpay.com/) & Real-time UPI Deep Linking (`qrcode.react`) |
+| **Deployment** | [Vercel](https://vercel.com/) (Zero-configuration CI/CD) |
+
+---
+
+## 🚀 Getting Started
+
+### 1. Clone the Repository
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/aswin32156/Garland.git
+cd Garland
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 2. Install Dependencies
+```bash
+npm install
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 3. Configure Environment Variables
+Create a `.env.local` file in the root directory (refer to `.env.example`):
+```env
+# Supabase
+NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
+SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+# Razorpay
+NEXT_PUBLIC_RAZORPAY_KEY_ID=rzp_test_xxxxxxxxxx
+RAZORPAY_KEY_ID=rzp_test_xxxxxxxxxx
+RAZORPAY_KEY_SECRET=your-razorpay-secret
 
-## Learn More
+# App
+NEXT_PUBLIC_APP_URL=http://localhost:3000
+NEXT_PUBLIC_APP_NAME=Malligai Garlands
+```
 
-To learn more about Next.js, take a look at the following resources:
+### 4. Set Up Database Schema
+1. Create a project in [Supabase](https://supabase.com).
+2. Open the **SQL Editor** in your Supabase dashboard.
+3. Paste and run the contents of [`supabase/migrations/001_initial_schema.sql`](supabase/migrations/001_initial_schema.sql).
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### 5. Run the Local Development Server
+```bash
+npm run dev
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Open [http://localhost:3000](http://localhost:3000) in your browser to view the application.
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 🌐 Deploying to Vercel
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+1. Push this repository to your GitHub account.
+2. Sign in to [Vercel](https://vercel.com) and click **"Add New..."** → **Project**.
+3. Select the `Garland` repository and click **Import**.
+4. Add the environment variables from your `.env.local` file.
+5. Click **Deploy**. Vercel will build and publish your website with free SSL!
+
+---
+
+## 📞 Contact & Support
+
+**Malligai Garlands (மல்லிகை மாலைகள்)**  
+📍 Gandhi Market, Trichy, Tamil Nadu, India  
+📞 Phone: **+91 93446 76293**  
+💬 WhatsApp: **+91 93446 76293**  
+
+---
+
+## 📄 License
+This project is open-source and available under the [MIT License](LICENSE).
