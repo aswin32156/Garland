@@ -653,18 +653,18 @@ export default function OwnerDashboard() {
     <div className="min-h-screen bg-gray-50 pt-20 pb-16">
       {/* ── Top Header ── */}
       <div className="bg-white border-b border-gray-100 shadow-xs px-4 py-3.5 sm:py-4 sticky top-16 z-30">
-        <div className="max-w-6xl mx-auto flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-          <div>
+        <div className="max-w-6xl mx-auto flex items-start sm:items-center justify-between gap-3">
+          <div className="min-w-0 flex-1">
             <div className="flex items-center gap-2 flex-wrap">
               <h1 className="font-display text-xl sm:text-2xl font-bold text-gray-900">Owner Dashboard</h1>
-              <span className="px-2.5 py-0.5 rounded-full bg-rose-100 text-rose-800 text-xs font-bold">
+              <span className="px-2.5 py-0.5 rounded-full bg-rose-100 text-rose-800 text-xs font-bold shrink-0">
                 Store Live
               </span>
             </div>
-            <p className="text-xs sm:text-sm text-gray-500">Live Order Fulfillment & Real-Time Customer Purchases</p>
+            <p className="text-xs sm:text-sm text-gray-500 truncate sm:whitespace-normal">Live Order Fulfillment & Real-Time Customer Purchases</p>
           </div>
 
-          <div className="flex items-center justify-between sm:justify-end gap-3">
+          <div className="flex items-center justify-end gap-3 shrink-0">
             {/* Notification Bell with interactive panel */}
             <div className="relative" ref={notifPanelRef}>
               <button
@@ -690,27 +690,34 @@ export default function OwnerDashboard() {
               {/* Notification Dropdown Panel */}
               <AnimatePresence>
                 {notificationsOpen && (
-                  <motion.div
-                    initial={{ opacity: 0, y: 10, scale: 0.95 }}
-                    animate={{ opacity: 1, y: 0, scale: 1 }}
-                    exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                    transition={{ duration: 0.2 }}
-                    className="absolute right-0 mt-3 w-[calc(100vw-32px)] sm:w-96 max-w-sm bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden z-50 text-left"
-                  >
-                    {/* Panel Header */}
-                    <div className="p-4 bg-gradient-to-r from-rose-50 to-pink-50 border-b border-rose-100/60">
-                      <div className="flex items-center justify-between mb-2">
-                        <div className="flex items-center gap-2">
-                          <div className="w-7 h-7 rounded-lg bg-rose-500 text-white flex items-center justify-center shadow-xs">
-                            <Bell className="w-4 h-4" />
+                  <>
+                    {/* Mobile Backdrop */}
+                    <div
+                      className="fixed inset-0 bg-black/25 backdrop-blur-[2px] z-40 sm:hidden"
+                      onClick={() => setNotificationsOpen(false)}
+                    />
+
+                    <motion.div
+                      initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                      transition={{ duration: 0.2 }}
+                      className="fixed inset-x-3 top-28 sm:top-full mt-0 sm:mt-3 sm:absolute sm:inset-x-auto sm:right-0 w-auto sm:w-96 max-w-none sm:max-w-sm max-h-[75vh] sm:max-h-[520px] flex flex-col bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden z-50 text-left"
+                    >
+                      {/* Panel Header */}
+                      <div className="p-4 bg-gradient-to-r from-rose-50 to-pink-50 border-b border-rose-100/60 shrink-0">
+                        <div className="flex items-center justify-between mb-2">
+                          <div className="flex items-center gap-2">
+                            <div className="w-7 h-7 rounded-lg bg-rose-500 text-white flex items-center justify-center shadow-xs">
+                              <Bell className="w-4 h-4" />
+                            </div>
+                            <h2 className="font-bold text-gray-900 text-sm">Customer Orders</h2>
+                            {unreadNotifCount > 0 && (
+                              <span className="px-2 py-0.5 rounded-full bg-rose-500 text-white text-[10px] font-bold">
+                                {unreadNotifCount} new
+                              </span>
+                            )}
                           </div>
-                          <h2 className="font-bold text-gray-900 text-sm">Customer Orders</h2>
-                          {unreadNotifCount > 0 && (
-                            <span className="px-2 py-0.5 rounded-full bg-rose-500 text-white text-[10px] font-bold">
-                              {unreadNotifCount} new
-                            </span>
-                          )}
-                        </div>
 
                         <div className="flex items-center gap-1">
                           <button
@@ -771,7 +778,7 @@ export default function OwnerDashboard() {
                     </div>
 
                     {/* Notifications List */}
-                    <div className="max-h-80 overflow-y-auto divide-y divide-gray-100">
+                    <div className="overflow-y-auto divide-y divide-gray-100 flex-1 min-h-0">
                       {displayedNotifications.length === 0 ? (
                         <div className="p-8 text-center text-gray-500">
                           <div className="w-10 h-10 rounded-full bg-rose-50 flex items-center justify-center mx-auto mb-2 text-xl">
@@ -831,7 +838,7 @@ export default function OwnerDashboard() {
                     </div>
 
                     {/* Panel Footer */}
-                    <div className="p-3 bg-gray-50 border-t border-gray-100 text-center">
+                    <div className="p-3 bg-gray-50 border-t border-gray-100 text-center shrink-0">
                       <Link
                         href="/notifications"
                         onClick={() => setNotificationsOpen(false)}
@@ -841,7 +848,8 @@ export default function OwnerDashboard() {
                       </Link>
                     </div>
                   </motion.div>
-                )}
+                </>
+              )}
               </AnimatePresence>
             </div>
           </div>
