@@ -425,7 +425,7 @@ export function HomeView({ initialGarlands }: HomeViewProps) {
                   </div>
                   <div>
                     <span className="text-[10px] text-gray-500 uppercase font-bold block">Direct Call & WhatsApp</span>
-                    <a href="tel:9344676293" className="font-bold text-gray-900 hover:text-rose-600 font-mono text-sm">
+                    <a href="tel:+919344676293" className="font-bold text-gray-900 hover:text-rose-600 font-mono text-sm">
                       +91 93446 76293
                     </a>
                   </div>

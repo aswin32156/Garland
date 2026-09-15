@@ -1,24 +1,6 @@
 import Link from 'next/link';
 import { Flower2, Phone, Mail, MapPin, User } from 'lucide-react';
 
-function InstagramIcon() {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4">
-      <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
-      <circle cx="12" cy="12" r="4"/>
-      <circle cx="17.5" cy="6.5" r="0.5" fill="currentColor" stroke="none"/>
-    </svg>
-  );
-}
-
-function FacebookIcon() {
-  return (
-    <svg viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4">
-      <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
-    </svg>
-  );
-}
-
 export function Footer() {
   return (
     <footer className="bg-gray-900 text-gray-300">
@@ -34,17 +16,9 @@ export function Footer() {
                 Malligai <span className="text-rose-400">Garlands</span>
               </span>
             </div>
-            <p className="text-sm text-gray-400 leading-relaxed mb-4">
+            <p className="text-sm text-gray-400 leading-relaxed">
               Handcrafted with love. Fresh garlands for every occasion — pre-order online and pick up fresh from our store.
             </p>
-            <div className="flex gap-3">
-              <a href="#" aria-label="Instagram" className="w-9 h-9 rounded-lg bg-white/10 flex items-center justify-center hover:bg-rose-500 transition-colors">
-                <InstagramIcon />
-              </a>
-              <a href="#" aria-label="Facebook" className="w-9 h-9 rounded-lg bg-white/10 flex items-center justify-center hover:bg-rose-500 transition-colors">
-                <FacebookIcon />
-              </a>
-            </div>
           </div>
 
           {/* Quick Links */}
@@ -81,7 +55,7 @@ export function Footer() {
             </ul>
           </div>
 
-          {/* Contact */}
+          {/* Contact / Visit Us */}
           <div>
             <h4 className="text-white font-semibold mb-4">Visit Us</h4>
             <ul className="space-y-3">
@@ -91,18 +65,43 @@ export function Footer() {
               </li>
               <li className="flex items-start gap-2.5 text-sm text-gray-400">
                 <MapPin className="w-4 h-4 text-rose-400 shrink-0 mt-0.5" />
-                Gandhi Market, Trichy, Tamil Nadu 620008
+                <a
+                  href="https://maps.google.com/?q=Gandhi+Market+Trichy"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="hover:text-rose-300 transition-colors"
+                  title="View on Google Maps"
+                >
+                  Gandhi Market, Trichy, Tamil Nadu 620008
+                </a>
               </li>
-              <li className="flex items-center gap-2.5 text-sm text-gray-400">
+              <li className="flex items-center gap-2.5 text-sm">
                 <Phone className="w-4 h-4 text-rose-400 shrink-0" />
-                +91 93446 76293
+                <a
+                  href="tel:+919344676293"
+                  className="text-gray-300 hover:text-rose-400 transition-colors font-medium hover:underline flex items-center gap-1.5"
+                  title="Call +91 93446 76293"
+                >
+                  +91 93446 76293
+                  <span className="text-[10px] px-1.5 py-0.5 rounded bg-rose-500/20 text-rose-300 font-semibold uppercase">Call</span>
+                </a>
               </li>
               <li className="flex items-center gap-2.5 text-sm text-gray-400">
                 <Mail className="w-4 h-4 text-rose-400 shrink-0" />
-                hello@malligaigarlands.in
+                <a href="mailto:hello@malligaigarlands.in" className="hover:text-rose-300 transition-colors">
+                  hello@malligaigarlands.in
+                </a>
               </li>
             </ul>
-            <div className="mt-4 p-3 rounded-xl bg-white/5 border border-white/10">
+
+            <a
+              href="tel:+919344676293"
+              className="mt-4 inline-flex items-center justify-center gap-2 px-3.5 py-2 rounded-xl bg-rose-500 hover:bg-rose-600 text-white text-xs font-bold transition-all shadow-sm w-full"
+            >
+              <Phone className="w-3.5 h-3.5" /> Call Store: +91 93446 76293
+            </a>
+
+            <div className="mt-3 p-3 rounded-xl bg-white/5 border border-white/10">
               <p className="text-xs text-gray-400 font-medium">Store Hours</p>
               <p className="text-xs text-gray-300 mt-1">Mon – Sat: 8 AM – 8 PM</p>
               <p className="text-xs text-gray-300">Sunday: 8 AM – 8 PM</p>
