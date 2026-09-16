@@ -28,6 +28,7 @@ import { generateMockSlots } from '@/lib/mock-data';
 import { Input } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
+import { getGarlandPackagingInfo } from '@/lib/garland-utils';
 import { cn } from '@/lib/utils';
 import toast from 'react-hot-toast';
 import { addDays, format } from 'date-fns';
@@ -850,26 +851,44 @@ export default function CheckoutPage() {
           {/* Cart summary sidebar */}
           <div>
             <div className="bg-white rounded-3xl p-5 shadow-[var(--shadow-card)] sticky top-28 border border-gray-100">
-              <h3 className="font-display text-lg font-bold text-gray-900 mb-4">
+              <h3 className="font-display text-lg font-bold text-gray-900 mb-3">
                 Your Order Summary
               </h3>
+
+              {/* Packaging info notice */}
+              <div className="p-2.5 rounded-xl bg-amber-50/80 border border-amber-200 mb-4 text-[11px] text-amber-950 leading-snug">
+                💍 <strong>Wedding sets:</strong> Prepared as matching pairs (2 garlands each). Other garlands as singles.
+              </div>
+
               <div className="flex flex-col gap-3">
-                {items.map((item) => (
-                  <div key={item.id} className="flex gap-3 items-center">
-                    <div className="w-10 h-10 rounded-lg bg-rose-50 flex items-center justify-center text-lg shrink-0">
-                      🌸
+                {items.map((item) => {
+                  const packaging = getGarlandPackagingInfo(item.garland);
+                  return (
+                    <div key={item.id} className="flex gap-3 items-start">
+                      <div className="w-10 h-10 rounded-lg bg-rose-50 flex items-center justify-center text-lg shrink-0 overflow-hidden">
+                        {item.garland.images?.[0] ? (
+                          <img src={item.garland.images[0]} alt={item.garland.name} className="w-full h-full object-cover" />
+                        ) : (
+                          '🌸'
+                        )}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-xs font-semibold text-gray-800 truncate">
+                          {item.garland.name}
+                        </p>
+                        <p className="text-[11px] text-rose-600 font-medium">
+                          × {item.quantity} {packaging.isWedding ? 'Pair' : 'Single'}
+                        </p>
+                        <p className="text-[10px] text-gray-500">
+                          {packaging.getQuantitySummary(item.quantity)}
+                        </p>
+                      </div>
+                      <span className="text-xs font-bold text-gray-800 shrink-0">
+                        {formatPrice(item.garland.price * item.quantity)}
+                      </span>
                     </div>
-                    <div className="flex-1 min-w-0">
-                      <p className="text-xs font-semibold text-gray-800 truncate">
-                        {item.garland.name}
-                      </p>
-                      <p className="text-xs text-gray-500">× {item.quantity}</p>
-                    </div>
-                    <span className="text-xs font-bold text-gray-800 shrink-0">
-                      {formatPrice(item.garland.price * item.quantity)}
-                    </span>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
               <div className="border-t border-gray-100 mt-4 pt-4 flex justify-between font-bold">
                 <span className="text-gray-700">Total</span>

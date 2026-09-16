@@ -8,13 +8,14 @@ import {
   ChevronLeft, ChevronRight, ExternalLink
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { formatPrice } from '@/lib/utils';
+import { formatPrice, cn } from '@/lib/utils';
 import { useCartStore } from '@/store/cartStore';
 import { useAuthStore } from '@/store/authStore';
 import { useWishlistStore } from '@/store/wishlistStore';
 import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
 import { GarlandCard } from '@/components/garland/GarlandCard';
+import { getGarlandPackagingInfo } from '@/lib/garland-utils';
 import toast from 'react-hot-toast';
 import { Garland } from '@/types';
 
@@ -52,6 +53,7 @@ interface GarlandDetailViewProps {
 export function GarlandDetailView({ garland, allGarlands }: GarlandDetailViewProps) {
   const idx = allGarlands.findIndex((g) => g.id === garland.id || g.slug === garland.slug);
   const [quantity, setQuantity] = useState(1);
+  const packaging = getGarlandPackagingInfo(garland);
   const images = Array.isArray(garland.images)
     ? garland.images.filter((url): url is string => typeof url === 'string' && url.trim().length > 0)
     : [];
@@ -114,7 +116,7 @@ export function GarlandDetailView({ garland, allGarlands }: GarlandDetailViewPro
       return;
     }
     addItem(garland, quantity);
-    toast.success(`${quantity}× ${garland.name} added to cart! 🌸`);
+    toast.success(`${quantity}× ${garland.name} (${packaging.getQuantitySummary(quantity)}) added to cart! 🌸`);
   }
 
   function handleBuyNow() {
@@ -267,6 +269,16 @@ export function GarlandDetailView({ garland, allGarlands }: GarlandDetailViewPro
               {garland.category && <Badge variant="jade">{garland.category.name}</Badge>}
               {garland.occasion && <Badge variant="rose">{garland.occasion.icon} {garland.occasion.name}</Badge>}
               {garland.flower_type && <Badge variant="gray">{garland.flower_type}</Badge>}
+              <span
+                className={cn(
+                  'inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold border shadow-xs',
+                  packaging.isWedding
+                    ? 'bg-amber-100 text-amber-900 border-amber-300'
+                    : 'bg-emerald-100 text-emerald-900 border-emerald-300'
+                )}
+              >
+                {packaging.badgeLabel}
+              </span>
             </div>
 
             {/* Name */}
@@ -274,10 +286,13 @@ export function GarlandDetailView({ garland, allGarlands }: GarlandDetailViewPro
               {garland.name}
             </h1>
 
-            {/* Price */}
-            <div className="flex items-baseline gap-3 mb-6">
+            {/* Price & Unit */}
+            <div className="flex items-baseline gap-3 mb-4 flex-wrap">
               <span className="font-display text-4xl font-bold text-gray-900">
                 {formatPrice(garland.price)}
+              </span>
+              <span className="text-sm font-semibold text-gray-500">
+                / {packaging.unitLabel}
               </span>
               {garland.is_available ? (
                 <Badge variant="available">
@@ -288,12 +303,64 @@ export function GarlandDetailView({ garland, allGarlands }: GarlandDetailViewPro
               )}
             </div>
 
+            {/* Prominent Packaging & Quantity Notice Banner */}
+            <div
+              className={cn(
+                'p-4 rounded-2xl border-2 mb-6 shadow-xs',
+                packaging.isWedding
+                  ? 'bg-gradient-to-r from-amber-50 to-rose-50/50 border-amber-200'
+                  : 'bg-gradient-to-r from-emerald-50 to-cream-50 border-emerald-200'
+              )}
+            >
+              <div className="flex items-start gap-3">
+                <span className="text-2xl shrink-0 mt-0.5">{packaging.isWedding ? '💍' : '🌸'}</span>
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <h3 className="font-bold text-sm sm:text-base text-gray-900">
+                      {packaging.bannerTitle}
+                    </h3>
+                    {packaging.isWedding && (
+                      <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-200 text-amber-900 border border-amber-300">
+                        Bride & Groom Pair
+                      </span>
+                    )}
+                  </div>
+                  <p className="text-xs text-gray-700 mt-1 leading-relaxed">
+                    {packaging.bannerDesc}
+                  </p>
+                  <p className="text-xs font-bold text-gray-900 mt-2 flex items-center gap-1.5 bg-white/80 px-3 py-1.5 rounded-xl w-fit border border-gray-200">
+                    <span>✨</span> As required, you can increase the count using the quantity selector below.
+                  </p>
+                </div>
+              </div>
+            </div>
+
             {/* Description */}
-            <p className="text-gray-600 leading-relaxed mb-6">{garland.description}</p>
+            <p className="text-gray-600 leading-relaxed mb-4 whitespace-pre-line">{garland.description}</p>
+
+            {/* Packaging Specification Callout */}
+            <div className="p-3.5 rounded-xl bg-gray-50 border border-gray-200 text-xs text-gray-700 mb-6 leading-relaxed">
+              <p className="font-bold text-gray-900 flex items-center gap-1.5 mb-1.5">
+                <span>📋</span> Ordering & Packaging Details:
+              </p>
+              <ul className="list-disc pl-4 space-y-1 text-gray-600">
+                <li>
+                  <strong className="text-gray-800">Wedding Garlands:</strong> Prepared & supplied as a matching <strong className="text-gray-900">Pair (2 Garlands — 1 for Bride & 1 for Groom)</strong>.
+                </li>
+                <li>
+                  <strong className="text-gray-800">Other Garlands:</strong> Prepared & supplied as <strong className="text-gray-900">Single Garland (1 Piece)</strong>.
+                </li>
+                <li>
+                  <strong className="text-gray-800">Quantity Flexibility:</strong> As required, you can increase the count below (e.g., 2 units = 2 pairs / 4 garlands).
+                </li>
+              </ul>
+            </div>
 
             {/* Garland details */}
-            <div className="grid grid-cols-2 gap-3 mb-8">
+            <div className="grid grid-cols-2 gap-3 mb-6">
               {[
+                { label: 'Packaging / Set', value: packaging.specValue },
+                { label: 'Garlands Included', value: packaging.isWedding ? '2 Pieces (Bride & Groom)' : '1 Piece (Single)' },
                 { label: 'Flower Type', value: garland.flower_type || 'Mixed' },
                 { label: 'Occasion', value: garland.occasion?.name || 'All Occasions' },
                 { label: 'Category', value: garland.category?.name || 'General' },
@@ -306,27 +373,46 @@ export function GarlandDetailView({ garland, allGarlands }: GarlandDetailViewPro
               ))}
             </div>
 
-            {/* Quantity selector */}
-            <div className="flex items-center gap-4 mb-6">
-              <span className="text-sm font-semibold text-gray-700">Quantity:</span>
-              <div className="flex items-center gap-1 border-2 border-gray-200 rounded-xl overflow-hidden">
-                <button
-                  onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                  className="w-10 h-10 flex items-center justify-center text-lg font-bold hover:bg-rose-50 hover:text-rose-500 transition-colors"
-                >
-                  −
-                </button>
-                <span className="w-10 text-center font-bold text-gray-900">{quantity}</span>
-                <button
-                  onClick={() => setQuantity(quantity + 1)}
-                  className="w-10 h-10 flex items-center justify-center text-lg font-bold hover:bg-rose-50 hover:text-rose-500 transition-colors"
-                >
-                  +
-                </button>
+            {/* Quantity selector with dynamic live calculation */}
+            <div className="mb-6 p-4 rounded-2xl bg-gray-50/90 border border-gray-200">
+              <div className="flex items-center justify-between gap-3 mb-2.5 flex-wrap">
+                <span className="text-sm font-bold text-gray-800">
+                  Select Quantity ({packaging.unitLabel}):
+                </span>
+                <span className="text-sm font-semibold text-gray-600">
+                  Subtotal: <strong className="text-gray-950 font-display text-base">{formatPrice(garland.price * quantity)}</strong>
+                </span>
               </div>
-              <span className="text-sm text-gray-500">
-                Subtotal: <strong className="text-gray-800">{formatPrice(garland.price * quantity)}</strong>
-              </span>
+
+              <div className="flex flex-col sm:flex-row sm:items-center gap-3">
+                <div className="flex items-center gap-1 border-2 border-gray-300 bg-white rounded-xl overflow-hidden shadow-xs w-fit">
+                  <button
+                    onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                    className="w-10 h-10 flex items-center justify-center text-lg font-bold hover:bg-rose-50 hover:text-rose-500 transition-colors"
+                    aria-label="Decrease quantity"
+                  >
+                    −
+                  </button>
+                  <span className="w-12 text-center font-bold text-gray-900">{quantity}</span>
+                  <button
+                    onClick={() => setQuantity(quantity + 1)}
+                    className="w-10 h-10 flex items-center justify-center text-lg font-bold hover:bg-rose-50 hover:text-rose-500 transition-colors"
+                    aria-label="Increase quantity"
+                  >
+                    +
+                  </button>
+                </div>
+
+                {/* Live Dynamic Calculation */}
+                <div className="flex-1 min-w-0">
+                  <p className="text-xs sm:text-sm font-bold text-gray-900">
+                    Total Included: <span className="text-rose-600 font-semibold">{packaging.getQuantitySummary(quantity)}</span>
+                  </p>
+                  <p className="text-[11px] text-gray-500">
+                    As required, you can increase the count using + / − buttons
+                  </p>
+                </div>
+              </div>
             </div>
 
             {/* CTAs */}

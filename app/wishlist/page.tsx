@@ -3,7 +3,8 @@
 import Link from 'next/link';
 import { Heart, ShoppingCart, Trash2, ArrowLeft } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { formatPrice } from '@/lib/utils';
+import { formatPrice, cn } from '@/lib/utils';
+import { getGarlandPackagingInfo } from '@/lib/garland-utils';
 import { useCartStore } from '@/store/cartStore';
 import { useWishlistStore } from '@/store/wishlistStore';
 import { useAuthStore } from '@/store/authStore';
@@ -78,51 +79,73 @@ export default function WishlistPage() {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <AnimatePresence>
-            {wishlist.map((garland) => (
-              <motion.div
-                key={garland.id}
-                layout
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.9 }}
-                transition={{ duration: 0.25 }}
-                className="bg-white rounded-2xl shadow-[var(--shadow-card)] border border-rose-50 flex gap-4 p-4 hover:border-rose-200 transition-all group"
-              >
-                <div className="w-24 h-24 rounded-xl bg-gradient-to-br from-rose-100 to-cream-100 flex items-center justify-center text-3xl shrink-0 shadow-inner">
-                  🌸
-                </div>
-                <div className="flex-1 min-w-0 flex flex-col justify-between">
-                  <div>
-                    <Link href={`/garlands/${garland.slug}`}>
-                      <h3 className="font-semibold text-gray-900 hover:text-rose-600 transition-colors line-clamp-1 text-sm sm:text-base">
-                        {garland.name}
-                      </h3>
-                    </Link>
-                    <p className="text-xs text-gray-500 mt-0.5">
-                      {garland.category?.name || 'Garland'} · {garland.flower_type || 'Fresh Flowers'}
-                    </p>
-                    <p className="font-bold text-rose-600 font-display mt-1">
-                      {formatPrice(garland.price)}
-                    </p>
+            {wishlist.map((garland) => {
+              const packaging = getGarlandPackagingInfo(garland);
+              return (
+                <motion.div
+                  key={garland.id}
+                  layout
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.9 }}
+                  transition={{ duration: 0.25 }}
+                  className="bg-white rounded-2xl shadow-[var(--shadow-card)] border border-rose-50 flex gap-4 p-4 hover:border-rose-200 transition-all group"
+                >
+                  <div className="w-24 h-24 rounded-xl bg-gradient-to-br from-rose-100 to-cream-100 flex items-center justify-center text-3xl shrink-0 shadow-inner overflow-hidden">
+                    {garland.images?.[0] ? (
+                      <img src={garland.images[0]} alt={garland.name} className="w-full h-full object-cover" />
+                    ) : (
+                      '🌸'
+                    )}
                   </div>
-                  <div className="flex items-center gap-2 mt-2 pt-2 border-t border-gray-50">
-                    <button
-                      onClick={() => moveToCart(garland)}
-                      className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-rose-500 text-white text-xs font-semibold hover:bg-rose-600 transition-colors shadow-xs"
-                    >
-                      <ShoppingCart className="w-3.5 h-3.5" /> Move to Cart
-                    </button>
-                    <button
-                      onClick={() => remove(garland.id)}
-                      className="p-1.5 rounded-xl hover:bg-rose-50 text-gray-400 hover:text-rose-600 transition-colors"
-                      title="Remove from wishlist"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </button>
+                  <div className="flex-1 min-w-0 flex flex-col justify-between">
+                    <div>
+                      <Link href={`/garlands/${garland.slug}`}>
+                        <h3 className="font-semibold text-gray-900 hover:text-rose-600 transition-colors line-clamp-1 text-sm sm:text-base">
+                          {garland.name}
+                        </h3>
+                      </Link>
+                      <p className="text-xs text-gray-500 mt-0.5">
+                        {garland.category?.name || 'Garland'} · {garland.flower_type || 'Fresh Flowers'}
+                      </p>
+                      <div className="flex items-center gap-1.5 mt-1.5 flex-wrap">
+                        <span
+                          className={cn(
+                            'text-[10px] font-bold px-2 py-0.5 rounded-full border',
+                            packaging.isWedding
+                              ? 'bg-amber-50 text-amber-900 border-amber-200'
+                              : 'bg-emerald-50 text-emerald-900 border-emerald-200'
+                          )}
+                        >
+                          {packaging.badgeShort}
+                        </span>
+                        <p className="font-bold text-rose-600 font-display text-sm">
+                          {formatPrice(garland.price)}{' '}
+                          <span className="text-[10px] font-normal text-gray-500">
+                            / {packaging.unitLabel}
+                          </span>
+                        </p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2 mt-2 pt-2 border-t border-gray-50">
+                      <button
+                        onClick={() => moveToCart(garland)}
+                        className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-rose-500 text-white text-xs font-semibold hover:bg-rose-600 transition-colors shadow-xs"
+                      >
+                        <ShoppingCart className="w-3.5 h-3.5" /> Move to Cart
+                      </button>
+                      <button
+                        onClick={() => remove(garland.id)}
+                        className="p-1.5 rounded-xl hover:bg-rose-50 text-gray-400 hover:text-rose-600 transition-colors"
+                        title="Remove from wishlist"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    </div>
                   </div>
-                </div>
-              </motion.div>
-            ))}
+                </motion.div>
+              );
+            })}
           </AnimatePresence>
         </div>
       </div>

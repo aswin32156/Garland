@@ -6,7 +6,8 @@ import { Trash2, ShoppingBag, ArrowLeft, ArrowRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useCartStore } from '@/store/cartStore';
 import { useAuthStore } from '@/store/authStore';
-import { formatPrice } from '@/lib/utils';
+import { formatPrice, cn } from '@/lib/utils';
+import { getGarlandPackagingInfo } from '@/lib/garland-utils';
 import { Button } from '@/components/ui/Button';
 
 function QuantityControl({ id, quantity }: { id: string; quantity: number }) {
@@ -85,8 +86,17 @@ export default function CartPage() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* ── Cart Items ── */}
           <div className="lg:col-span-2 flex flex-col gap-4">
+            {/* Packaging Reminder Banner */}
+            <div className="p-3.5 rounded-2xl bg-amber-50/80 border border-amber-200 flex items-start sm:items-center gap-2.5 text-xs text-amber-950">
+              <span className="text-base shrink-0">💡</span>
+              <p className="leading-relaxed">
+                <strong className="font-bold">Packaging Reminder:</strong> Wedding garlands come as a <strong className="font-bold">Pair (2 Garlands — Bride & Groom set)</strong>. Other garlands come as <strong className="font-bold">Single (1 Piece)</strong>. You can increase or decrease the count below as required.
+              </p>
+            </div>
+
             <AnimatePresence>
               {items.map((item) => {
+                const packaging = getGarlandPackagingInfo(item.garland);
                 const subtitle = [item.garland.flower_type, item.garland.category?.name]
                   .filter(Boolean)
                   .join(' · ');
@@ -126,9 +136,26 @@ export default function CartPage() {
                             {subtitle}
                           </p>
                         )}
-                        <p className="text-xs sm:text-sm font-bold text-rose-600 mt-1">
-                          {formatPrice(item.garland.price)}{' '}
-                          <span className="text-[11px] font-normal text-gray-500">each</span>
+                        <div className="mt-1 flex items-center gap-1.5 flex-wrap">
+                          <span
+                            className={cn(
+                              'text-[11px] font-bold px-2 py-0.5 rounded-full border',
+                              packaging.isWedding
+                                ? 'bg-amber-50 text-amber-900 border-amber-200'
+                                : 'bg-emerald-50 text-emerald-900 border-emerald-200'
+                            )}
+                          >
+                            {packaging.badgeLabel}
+                          </span>
+                          <span className="text-xs sm:text-sm font-bold text-rose-600">
+                            {formatPrice(item.garland.price)}{' '}
+                            <span className="text-[11px] font-normal text-gray-500">
+                              / {packaging.unitLabel}
+                            </span>
+                          </span>
+                        </div>
+                        <p className="text-[11px] font-medium text-gray-600 mt-1">
+                          You receive: <strong className="text-gray-900">{packaging.getQuantitySummary(item.quantity)}</strong>
                         </p>
                       </div>
 
@@ -145,7 +172,12 @@ export default function CartPage() {
 
                     {/* Bottom Row on Mobile / Right Column on Desktop */}
                     <div className="flex items-center justify-between sm:justify-end gap-4 pt-3 sm:pt-0 border-t sm:border-t-0 border-gray-100 shrink-0">
-                      <QuantityControl id={item.id} quantity={item.quantity} />
+                      <div className="flex flex-col items-center sm:items-start gap-1">
+                        <QuantityControl id={item.id} quantity={item.quantity} />
+                        <span className="text-[10px] text-gray-400 font-medium">
+                          Count: {item.quantity}
+                        </span>
+                      </div>
 
                       <div className="flex items-center gap-3">
                         <div className="text-right">
@@ -178,16 +210,24 @@ export default function CartPage() {
               <h2 className="font-display text-xl font-bold text-gray-900 mb-4">Order Summary</h2>
 
               <div className="space-y-3 mb-4">
-                {items.map((item) => (
-                  <div key={item.id} className="flex justify-between text-sm">
-                    <span className="text-gray-600 truncate flex-1 mr-2">
-                      {item.garland.name} × {item.quantity}
-                    </span>
-                    <span className="font-medium text-gray-800 shrink-0">
-                      {formatPrice(item.garland.price * item.quantity)}
-                    </span>
-                  </div>
-                ))}
+                {items.map((item) => {
+                  const packaging = getGarlandPackagingInfo(item.garland);
+                  return (
+                    <div key={item.id} className="flex justify-between text-sm gap-2">
+                      <div className="truncate flex-1 min-w-0">
+                        <span className="text-gray-800 font-medium block truncate">
+                          {item.garland.name} × {item.quantity}
+                        </span>
+                        <span className="text-[11px] text-gray-500 block">
+                          {packaging.getQuantitySummary(item.quantity)}
+                        </span>
+                      </div>
+                      <span className="font-medium text-gray-800 shrink-0">
+                        {formatPrice(item.garland.price * item.quantity)}
+                      </span>
+                    </div>
+                  );
+                })}
               </div>
 
               <div className="border-t border-gray-100 pt-4 mb-6">

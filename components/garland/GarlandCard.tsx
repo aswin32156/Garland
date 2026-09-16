@@ -10,6 +10,7 @@ import { useCartStore } from '@/store/cartStore';
 import { useWishlistStore } from '@/store/wishlistStore';
 import { useAuthStore } from '@/store/authStore';
 import { Badge } from '@/components/ui/Badge';
+import { getGarlandPackagingInfo } from '@/lib/garland-utils';
 import toast from 'react-hot-toast';
 
 interface GarlandCardProps {
@@ -52,6 +53,7 @@ export function GarlandCard({ garland, index = 0 }: GarlandCardProps) {
   const addItem = useCartStore((s) => s.addItem);
   const user = useAuthStore((s) => s.user);
   const openAuthModal = useAuthStore((s) => s.openAuthModal);
+  const packaging = getGarlandPackagingInfo(garland);
 
   function handleAddToCart(e: React.MouseEvent) {
     e.preventDefault();
@@ -63,7 +65,10 @@ export function GarlandCard({ garland, index = 0 }: GarlandCardProps) {
     }
 
     addItem(garland, 1);
-    toast.success(`${garland.name} added to cart! 🌸`, {
+    const toastMsg = packaging.isWedding
+      ? `${garland.name} (1 Pair / 2 Garlands) added to cart! 💍`
+      : `${garland.name} added to cart! 🌸`;
+    toast.success(toastMsg, {
       style: { borderRadius: '12px', fontFamily: 'Inter, sans-serif' },
     });
   }
@@ -114,19 +119,29 @@ export function GarlandCard({ garland, index = 0 }: GarlandCardProps) {
         </div>
 
         {/* Badges */}
-        <div className="absolute top-3 left-3 flex flex-col gap-1.5">
+        <div className="absolute top-3 left-3 flex flex-col gap-1.5 z-10">
           {garland.is_featured && (
             <Badge variant="rose">⭐ Featured</Badge>
           )}
           {garland.is_popular && (
             <Badge variant="gold">🔥 Popular</Badge>
           )}
+          <span
+            className={cn(
+              'inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-bold shadow-xs backdrop-blur-md border',
+              packaging.isWedding
+                ? 'bg-amber-600/90 text-white border-amber-400'
+                : 'bg-emerald-600/90 text-white border-emerald-500'
+            )}
+          >
+            {packaging.badgeLabel}
+          </span>
         </div>
 
         {/* Wishlist Button */}
         <button
           onClick={handleWishlist}
-          className="absolute top-3 right-3 w-9 h-9 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center shadow-sm hover:scale-110 transition-transform"
+          className="absolute top-3 right-3 w-9 h-9 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center shadow-sm hover:scale-110 transition-transform z-10"
           aria-label="Add to wishlist"
         >
           <Heart
@@ -145,27 +160,47 @@ export function GarlandCard({ garland, index = 0 }: GarlandCardProps) {
           </Link>
         </div>
 
-        <p className="text-xs text-gray-500 mb-2 line-clamp-2 leading-relaxed">
+        <p className="text-xs text-gray-500 mb-2.5 line-clamp-2 leading-relaxed">
           {garland.description}
         </p>
 
-        <div className="flex items-center gap-2 mb-3 flex-wrap">
+        <div className="flex items-center gap-1.5 mb-3 flex-wrap">
           {garland.category && (
             <Badge variant="jade">{garland.category.name}</Badge>
           )}
           {garland.flower_type && (
             <Badge variant="gray">{garland.flower_type}</Badge>
           )}
+          <span
+            className={cn(
+              'text-[11px] font-semibold px-2 py-0.5 rounded-md border',
+              packaging.isWedding
+                ? 'bg-amber-50 text-amber-900 border-amber-200'
+                : 'bg-emerald-50 text-emerald-900 border-emerald-200'
+            )}
+          >
+            {packaging.isWedding ? '💍 1 Pair (2 Garlands)' : '🌸 Single (1 Pc)'}
+          </span>
         </div>
 
         {/* Price + CTA */}
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between gap-2">
           <div>
-            <span className="text-xl font-bold text-gray-900 font-display">
-              {formatPrice(garland.price)}
-            </span>
+            <div className="flex items-baseline gap-1.5">
+              <span className="text-xl font-bold text-gray-900 font-display">
+                {formatPrice(garland.price)}
+              </span>
+              <span className="text-[11px] text-gray-500 font-medium">
+                / {packaging.isWedding ? 'Pair (2 pcs)' : 'Single (1 pc)'}
+              </span>
+            </div>
+            <p className="text-[10px] text-gray-400 leading-none mt-0.5">
+              {packaging.isWedding
+                ? '2 Garlands included • Increase count as required'
+                : '1 Garland included • Increase count as required'}
+            </p>
             {!garland.is_available && (
-              <Badge variant="unavailable" className="ml-2">Unavailable</Badge>
+              <Badge variant="unavailable" className="mt-1">Unavailable</Badge>
             )}
           </div>
 
@@ -173,7 +208,7 @@ export function GarlandCard({ garland, index = 0 }: GarlandCardProps) {
             onClick={handleAddToCart}
             disabled={!garland.is_available}
             className={cn(
-              'flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold transition-all duration-200',
+              'flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold transition-all duration-200 shrink-0 cursor-pointer',
               garland.is_available
                 ? 'bg-rose-500 text-white hover:bg-rose-600 hover:shadow-md active:scale-95'
                 : 'bg-gray-100 text-gray-400 cursor-not-allowed'

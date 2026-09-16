@@ -132,6 +132,27 @@ export function GarlandsView({ initialGarlands }: GarlandsViewProps) {
           </div>
         )}
 
+        {/* ── Packaging Information Guide Banner ── */}
+        <div className="mb-6 p-4 rounded-2xl bg-gradient-to-r from-amber-50 via-rose-50/40 to-emerald-50 border border-amber-200/80 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div className="flex items-start gap-3">
+            <span className="text-2xl shrink-0 mt-0.5">ℹ️</span>
+            <div>
+              <p className="text-sm font-bold text-gray-900 flex items-center gap-2">
+                Garland Packaging & Quantity Guide
+              </p>
+              <p className="text-xs text-gray-600 mt-0.5 leading-relaxed">
+                💍 All <strong className="text-gray-900">Wedding Garlands</strong> come as <strong className="text-gray-900">1 Pair (2 Garlands — Bride & Groom set)</strong>.
+                <span className="hidden sm:inline"> • </span>
+                <br className="sm:hidden" />
+                🌸 All other pooja, temple, festival & function garlands come as <strong className="text-gray-900">Single (1 Piece)</strong>.
+              </p>
+            </div>
+          </div>
+          <div className="shrink-0 bg-white/80 px-3 py-1.5 rounded-xl border border-amber-200/70 text-[11px] font-semibold text-gray-800 self-start sm:self-auto">
+            ✨ As required, you can increase count for each item
+          </div>
+        </div>
+
         {/* ── Search + Filter bar ── */}
         <div className="flex gap-3 items-center">
           <div className="flex-1">
