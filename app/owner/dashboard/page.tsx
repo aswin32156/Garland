@@ -1066,24 +1066,15 @@ export default function OwnerDashboard() {
                     </div>
                   </div>
 
-                  {/* ── What They Bought (Garland Item Details) ── */}
+                  {/* ── Garland Item Details ── */}
                   <div className="p-4 sm:p-5">
-                    <div className="flex items-center justify-between mb-3">
-                      <div>
-                        <h4 className="text-xs font-bold uppercase tracking-wider text-gray-700 flex items-center gap-1.5">
-                          <ShoppingBag className="w-4 h-4 text-rose-500" />
-                          What They Bought ({order.items.length} {order.items.length === 1 ? 'Garland' : 'Garlands'})
-                        </h4>
-                        <p className="text-[11px] text-rose-600 font-medium mt-0.5">
-                          💡 Click any garland below to maximize photo & see customer order history
-                        </p>
-                      </div>
-                      {order.payment_id && (
-                        <span className="text-[10px] text-gray-400 font-mono bg-gray-50 px-2 py-0.5 rounded-md border border-gray-100 hidden sm:inline-block">
+                    {order.payment_id && (
+                      <div className="flex justify-end mb-2.5">
+                        <span className="text-[10px] text-gray-400 font-mono bg-gray-50 px-2 py-0.5 rounded-md border border-gray-100">
                           Payment Ref: {order.payment_id}
                         </span>
-                      )}
-                    </div>
+                      </div>
+                    )}
 
                     {order.items.length === 0 ? (
                       <div className="p-3 bg-gray-50 rounded-xl text-xs text-gray-500">
