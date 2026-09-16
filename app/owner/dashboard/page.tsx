@@ -1090,58 +1090,65 @@ export default function OwnerDashboard() {
                             <div
                               key={item.id || idx}
                               onClick={() => handleOpenMaximized(item, order)}
-                              className="group flex items-center gap-3.5 p-3 rounded-2xl bg-gray-50/80 border border-gray-100 hover:bg-rose-50/50 hover:border-rose-300 transition-all cursor-pointer relative shadow-2xs hover:shadow-sm"
+                              className="group flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3.5 rounded-2xl bg-gray-50/90 border border-gray-100 hover:bg-rose-50/50 hover:border-rose-300 transition-all cursor-pointer relative shadow-2xs hover:shadow-sm"
                               title="Click to maximize garland photo & view customer order history"
                             >
-                              {/* Garland Thumbnail with Maximize Hover Overlay */}
-                              <div className="relative shrink-0 overflow-hidden rounded-xl">
-                                {itemImg ? (
-                                  <img
-                                    src={itemImg}
-                                    alt={item.garland_name}
-                                    className="w-14 h-14 object-cover border border-rose-100 shadow-xs group-hover:scale-110 transition-transform duration-300"
-                                  />
-                                ) : (
-                                  <div className="w-14 h-14 bg-rose-100 text-rose-600 flex items-center justify-center text-xl shrink-0 group-hover:scale-110 transition-transform duration-300">
-                                    🌸
+                              {/* Top Row on Mobile: Image + Full Name */}
+                              <div className="flex items-start sm:items-center gap-3 flex-1 min-w-0">
+                                {/* Garland Thumbnail with Maximize Hover Overlay */}
+                                <div className="relative shrink-0 overflow-hidden rounded-xl">
+                                  {itemImg ? (
+                                    <img
+                                      src={itemImg}
+                                      alt={item.garland_name}
+                                      className="w-14 h-14 object-cover border border-rose-100 shadow-xs group-hover:scale-110 transition-transform duration-300"
+                                    />
+                                  ) : (
+                                    <div className="w-14 h-14 bg-rose-100 text-rose-600 flex items-center justify-center text-xl shrink-0 group-hover:scale-110 transition-transform duration-300">
+                                      🌸
+                                    </div>
+                                  )}
+                                  <div className="absolute inset-0 bg-black/40 rounded-xl opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity text-white">
+                                    <Maximize2 className="w-4 h-4 drop-shadow-md" />
                                   </div>
-                                )}
-                                <div className="absolute inset-0 bg-black/40 rounded-xl opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity text-white">
-                                  <Maximize2 className="w-4 h-4 drop-shadow-md" />
+                                </div>
+
+                                {/* Garland Name - fully readable without truncation */}
+                                <div className="flex-1 min-w-0">
+                                  <div className="flex items-start justify-between gap-1">
+                                    <p className="font-bold text-gray-900 text-sm sm:text-base leading-snug group-hover:text-rose-600 transition-colors break-words">
+                                      {item.garland_name || 'Handcrafted Fresh Garland'}
+                                    </p>
+                                    <span className="text-[10px] text-rose-600 opacity-0 group-hover:opacity-100 transition-opacity font-semibold shrink-0 hidden sm:inline-block">
+                                      🔍 Maximize
+                                    </span>
+                                  </div>
+
+                                  {item.customization_notes && (
+                                    <p className="text-[10px] text-amber-700 bg-amber-50 rounded-md px-1.5 py-0.5 mt-1 border border-amber-200/50 w-fit">
+                                      Note: {item.customization_notes}
+                                    </p>
+                                  )}
                                 </div>
                               </div>
 
-                              {/* Garland Info */}
-                              <div className="flex-1 min-w-0">
-                                <div className="flex items-center gap-1.5">
-                                  <p className="font-bold text-gray-900 text-sm line-clamp-1 group-hover:text-rose-600 transition-colors">
-                                    {item.garland_name || 'Handcrafted Fresh Garland'}
-                                  </p>
-                                  <span className="text-[10px] text-rose-600 opacity-0 group-hover:opacity-100 transition-opacity font-semibold shrink-0">
-                                    🔍 Maximize
-                                  </span>
-                                </div>
-                                <div className="flex items-center gap-2 mt-0.5 text-xs text-gray-500">
-                                  <span className="font-mono text-gray-700">
-                                    {formatPrice(item.unit_price || 0)} each
-                                  </span>
-                                  <span>•</span>
-                                  <span className="px-1.5 py-0.2 rounded bg-rose-100 text-rose-800 font-bold text-[11px]">
+                              {/* Bottom Row on Mobile / Right side on Desktop: Quantity and Price */}
+                              <div className="flex items-center justify-between sm:justify-end gap-3 pt-2.5 sm:pt-0 border-t sm:border-t-0 border-gray-200/70 sm:shrink-0">
+                                <div className="flex items-center gap-2 text-xs">
+                                  <span className="px-2 py-0.5 rounded-md bg-rose-100 text-rose-800 font-bold text-xs">
                                     Qty: {item.quantity}
                                   </span>
+                                  <span className="font-mono text-gray-600 font-medium">
+                                    {formatPrice(item.unit_price || 0)} each
+                                  </span>
                                 </div>
-                                {item.customization_notes && (
-                                  <p className="text-[10px] text-amber-700 bg-amber-50 rounded-md px-1.5 py-0.5 mt-1 border border-amber-200/50">
-                                    Note: {item.customization_notes}
-                                  </p>
-                                )}
-                              </div>
 
-                              {/* Item Subtotal */}
-                              <div className="text-right shrink-0">
-                                <span className="font-bold font-mono text-sm text-gray-900">
-                                  {formatPrice(itemTotal)}
-                                </span>
+                                <div className="text-right">
+                                  <span className="text-[10px] text-gray-400 block sm:hidden font-medium">Total</span>
+                                  <span className="font-bold font-mono text-sm sm:text-base text-gray-900">
+                                    {formatPrice(itemTotal)}
+                                  </span>
+                                </div>
                               </div>
                             </div>
                           );
