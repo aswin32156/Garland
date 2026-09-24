@@ -51,6 +51,11 @@ CREATE TRIGGER on_auth_user_created
   AFTER INSERT ON auth.users
   FOR EACH ROW EXECUTE FUNCTION handle_new_user();
 
+REVOKE EXECUTE ON FUNCTION handle_new_user() FROM PUBLIC;
+REVOKE EXECUTE ON FUNCTION handle_new_user() FROM anon;
+REVOKE EXECUTE ON FUNCTION handle_new_user() FROM authenticated;
+
+
 -- ── CATALOG ──────────────────────────────────────────────────────────────────
 
 CREATE TABLE categories (
@@ -262,16 +267,16 @@ ALTER TABLE cart_items ENABLE ROW LEVEL SECURITY;
 
 -- Helper function to get current user role
 CREATE OR REPLACE FUNCTION get_user_role()
-RETURNS user_role LANGUAGE plpgsql SECURITY DEFINER SET search_path = public AS $$
-  DECLARE role_val user_role;
-  BEGIN
-    SELECT role INTO role_val FROM profiles WHERE id = auth.uid();
-    RETURN role_val;
-  END;
+RETURNS user_role LANGUAGE sql STABLE SECURITY INVOKER SET search_path = public AS $$
+  SELECT role FROM profiles WHERE id = auth.uid();
 $$;
 
--- Profiles: users can read their own, owner/admin can read all
-CREATE POLICY "profiles_self_read" ON profiles FOR SELECT USING (id = auth.uid() OR get_user_role() IN ('OWNER', 'ADMIN'));
+REVOKE EXECUTE ON FUNCTION get_user_role() FROM PUBLIC;
+REVOKE EXECUTE ON FUNCTION get_user_role() FROM anon;
+GRANT EXECUTE ON FUNCTION get_user_role() TO authenticated;
+
+-- Profiles: users can read their own
+CREATE POLICY "profiles_self_read" ON profiles FOR SELECT USING (id = auth.uid());
 CREATE POLICY "profiles_self_update" ON profiles FOR UPDATE USING (id = auth.uid());
 
 -- Categories: public read, admin write
