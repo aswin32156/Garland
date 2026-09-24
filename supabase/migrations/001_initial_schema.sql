@@ -245,19 +245,24 @@ CREATE INDEX idx_pickup_slots_date ON pickup_slots(date);
 -- ── ROW LEVEL SECURITY ───────────────────────────────────────────────────────
 
 ALTER TABLE profiles ENABLE ROW LEVEL SECURITY;
+ALTER TABLE categories ENABLE ROW LEVEL SECURITY;
+ALTER TABLE occasions ENABLE ROW LEVEL SECURITY;
 ALTER TABLE garlands ENABLE ROW LEVEL SECURITY;
+ALTER TABLE pickup_slot_configs ENABLE ROW LEVEL SECURITY;
+ALTER TABLE pickup_slots ENABLE ROW LEVEL SECURITY;
 ALTER TABLE orders ENABLE ROW LEVEL SECURITY;
 ALTER TABLE order_items ENABLE ROW LEVEL SECURITY;
 ALTER TABLE payments ENABLE ROW LEVEL SECURITY;
 ALTER TABLE notifications ENABLE ROW LEVEL SECURITY;
+ALTER TABLE wishlists ENABLE ROW LEVEL SECURITY;
 ALTER TABLE wishlist_items ENABLE ROW LEVEL SECURITY;
 ALTER TABLE reviews ENABLE ROW LEVEL SECURITY;
+ALTER TABLE loyalty_transactions ENABLE ROW LEVEL SECURITY;
 ALTER TABLE cart_items ENABLE ROW LEVEL SECURITY;
-ALTER TABLE pickup_slots ENABLE ROW LEVEL SECURITY;
 
 -- Helper function to get current user role
 CREATE OR REPLACE FUNCTION get_user_role()
-RETURNS user_role LANGUAGE plpgsql SECURITY DEFINER AS $$
+RETURNS user_role LANGUAGE plpgsql SECURITY DEFINER SET search_path = public AS $$
   DECLARE role_val user_role;
   BEGIN
     SELECT role INTO role_val FROM profiles WHERE id = auth.uid();
@@ -269,9 +274,21 @@ $$;
 CREATE POLICY "profiles_self_read" ON profiles FOR SELECT USING (id = auth.uid() OR get_user_role() IN ('OWNER', 'ADMIN'));
 CREATE POLICY "profiles_self_update" ON profiles FOR UPDATE USING (id = auth.uid());
 
+-- Categories: public read, admin write
+CREATE POLICY "categories_public_read" ON categories FOR SELECT USING (TRUE);
+CREATE POLICY "categories_admin_all" ON categories FOR ALL USING (get_user_role() IN ('ADMIN', 'OWNER')) WITH CHECK (get_user_role() IN ('ADMIN', 'OWNER'));
+
+-- Occasions: public read, admin write
+CREATE POLICY "occasions_public_read" ON occasions FOR SELECT USING (TRUE);
+CREATE POLICY "occasions_admin_all" ON occasions FOR ALL USING (get_user_role() IN ('ADMIN', 'OWNER')) WITH CHECK (get_user_role() IN ('ADMIN', 'OWNER'));
+
 -- Garlands: public read, admin write
 CREATE POLICY "garlands_public_read" ON garlands FOR SELECT USING (TRUE);
-CREATE POLICY "garlands_admin_write" ON garlands FOR ALL USING (get_user_role() = 'ADMIN');
+CREATE POLICY "garlands_admin_write" ON garlands FOR ALL USING (get_user_role() IN ('ADMIN', 'OWNER'));
+
+-- Pickup slot configs: public read, admin write
+CREATE POLICY "pickup_slot_configs_public_read" ON pickup_slot_configs FOR SELECT USING (TRUE);
+CREATE POLICY "pickup_slot_configs_admin_all" ON pickup_slot_configs FOR ALL USING (get_user_role() IN ('ADMIN', 'OWNER')) WITH CHECK (get_user_role() IN ('ADMIN', 'OWNER'));
 
 -- Pickup slots: public read, admin write
 CREATE POLICY "pickup_slots_public_read" ON pickup_slots FOR SELECT USING (TRUE);
@@ -297,9 +314,14 @@ CREATE POLICY "notifications_own" ON notifications FOR ALL USING (user_id = auth
 CREATE POLICY "cart_own" ON cart_items FOR ALL USING (customer_id = auth.uid());
 
 -- Wishlist: users manage own
+CREATE POLICY "wishlists_customer_manage" ON wishlists FOR ALL USING (customer_id = auth.uid() OR get_user_role() IN ('ADMIN', 'OWNER')) WITH CHECK (customer_id = auth.uid() OR get_user_role() IN ('ADMIN', 'OWNER'));
 CREATE POLICY "wishlist_own" ON wishlist_items FOR ALL USING (
   EXISTS (SELECT 1 FROM wishlists w WHERE w.id = wishlist_id AND w.customer_id = auth.uid())
 );
+
+-- Loyalty: customers view own, admin/owner manage all
+CREATE POLICY "loyalty_transactions_customer_read" ON loyalty_transactions FOR SELECT USING (customer_id = auth.uid() OR get_user_role() IN ('ADMIN', 'OWNER'));
+CREATE POLICY "loyalty_transactions_admin_all" ON loyalty_transactions FOR ALL USING (get_user_role() IN ('ADMIN', 'OWNER')) WITH CHECK (get_user_role() IN ('ADMIN', 'OWNER'));
 
 -- Reviews: public read, authenticated customers write (verified purchase only)
 CREATE POLICY "reviews_public_read" ON reviews FOR SELECT USING (TRUE);
