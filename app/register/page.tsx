@@ -6,8 +6,9 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { Eye, EyeOff, Flower2, Mail, Lock, User, Phone } from 'lucide-react';
+import { Eye, EyeOff, Mail, Lock, User, Phone } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { BrandLogo } from '@/components/ui/BrandLogo';
 import { createClient } from '@/lib/supabase/client';
 import { Input } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
@@ -147,9 +148,7 @@ function RegisterFormContent() {
         <div className="bg-white rounded-3xl shadow-2xl p-8 sm:p-10">
           {/* Logo */}
           <div className="text-center mb-8">
-            <div className="w-14 h-14 rounded-full bg-rose-500 flex items-center justify-center mx-auto mb-4 shadow-lg">
-              <Flower2 className="w-7 h-7 text-white" />
-            </div>
+            <BrandLogo size={64} className="mx-auto mb-4 hover:scale-105 transition-transform" />
             <h1 className="font-display text-3xl font-bold text-gray-900">Create Account</h1>
             <p className="text-gray-500 mt-1 text-sm">Join Malligai Garlands today</p>
           </div>

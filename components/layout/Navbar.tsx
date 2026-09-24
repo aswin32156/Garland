@@ -2,7 +2,8 @@
 
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
-import { ShoppingCart, Heart, Bell, Menu, X, Flower2, LogOut, User, Shield, Store, ChevronDown } from 'lucide-react';
+import { ShoppingCart, Heart, Bell, Menu, X, LogOut, User, Shield, Store, ChevronDown } from 'lucide-react';
+import { BrandLogo } from '@/components/ui/BrandLogo';
 import { cn } from '@/lib/utils';
 import { useCartStore } from '@/store/cartStore';
 import { useAuthStore } from '@/store/authStore';
@@ -61,10 +62,8 @@ export function Navbar() {
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2 group" onClick={() => setMobileOpen(false)}>
-            <div className="w-9 h-9 rounded-full bg-rose-500 flex items-center justify-center shadow-sm group-hover:scale-110 transition-transform">
-              <Flower2 className="w-5 h-5 text-white" />
-            </div>
+          <Link href="/" className="flex items-center gap-2.5 group" onClick={() => setMobileOpen(false)}>
+            <BrandLogo size={36} className="group-hover:scale-105 transition-transform" />
             <span className="font-display text-xl font-bold text-gray-900 tracking-tight">
               Malligai <span className="text-rose-500">Garlands</span>
             </span>

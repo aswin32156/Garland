@@ -6,8 +6,9 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { Eye, EyeOff, Flower2, Mail, Lock } from 'lucide-react';
+import { Eye, EyeOff, Mail, Lock } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { BrandLogo } from '@/components/ui/BrandLogo';
 import { Input } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
 import { useAuthStore } from '@/store/authStore';
@@ -174,9 +175,7 @@ function LoginFormContent() {
         <div className="bg-white rounded-3xl shadow-xl border border-rose-50 p-8 sm:p-10">
           {/* Logo */}
           <div className="text-center mb-8">
-            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-rose-500 to-rose-600 flex items-center justify-center mx-auto mb-4 shadow-md text-white">
-              <Flower2 className="w-7 h-7" />
-            </div>
+            <BrandLogo size={64} className="mx-auto mb-4 hover:scale-105 transition-transform" />
             <h1 className="font-display text-3xl font-bold text-gray-900">Sign In</h1>
             <p className="text-gray-500 mt-1 text-sm">
               Sign in to manage your garland pre-orders and pickup times

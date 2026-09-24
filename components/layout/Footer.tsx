@@ -1,5 +1,6 @@
 import Link from 'next/link';
-import { Flower2, Phone, Mail, MapPin, User } from 'lucide-react';
+import { Phone, Mail, MapPin, User } from 'lucide-react';
+import { BrandLogo } from '@/components/ui/BrandLogo';
 
 export function Footer() {
   return (
@@ -8,10 +9,8 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* Brand */}
           <div className="lg:col-span-1">
-            <div className="flex items-center gap-2 mb-4">
-              <div className="w-9 h-9 rounded-full bg-rose-500 flex items-center justify-center">
-                <Flower2 className="w-5 h-5 text-white" />
-              </div>
+            <div className="flex items-center gap-2.5 mb-4">
+              <BrandLogo size={36} />
               <span className="font-display text-xl font-bold text-white">
                 Malligai <span className="text-rose-400">Garlands</span>
               </span>

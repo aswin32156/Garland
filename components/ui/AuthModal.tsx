@@ -2,7 +2,8 @@
 
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Flower2, Mail, Lock, User, Phone, CheckCircle2, ArrowRight } from 'lucide-react';
+import { X, Mail, Lock, User, Phone, CheckCircle2, ArrowRight } from 'lucide-react';
+import { BrandLogo } from '@/components/ui/BrandLogo';
 import { useAuthStore } from '@/store/authStore';
 import { useCartStore } from '@/store/cartStore';
 import { findDemoUser } from '@/lib/demo-auth';
@@ -199,9 +200,7 @@ export function AuthModal() {
 
         {/* Header */}
         <div className="bg-gradient-to-br from-rose-500 to-rose-600 p-6 text-white text-center relative overflow-hidden">
-          <div className="w-12 h-12 rounded-2xl bg-white/20 backdrop-blur-xs flex items-center justify-center mx-auto mb-3 text-2xl shadow-inner">
-            🌸
-          </div>
+          <BrandLogo size={52} className="mx-auto mb-3" />
           <h3 className="font-display text-2xl font-bold text-white">
             {mode === 'LOGIN' ? 'Sign In to Pre-Order' : 'Create Customer Account'}
           </h3>
