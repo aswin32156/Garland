@@ -312,6 +312,16 @@ CREATE POLICY "order_items_insert" ON order_items FOR INSERT WITH CHECK (
   EXISTS (SELECT 1 FROM orders o WHERE o.id = order_id AND o.customer_id = auth.uid())
 );
 
+-- Payments: customers see own payments, owner/admin manage all
+CREATE POLICY "payments_customer_read" ON payments FOR SELECT USING (
+  EXISTS (SELECT 1 FROM orders o WHERE o.id = order_id AND (o.customer_id = auth.uid() OR get_user_role() IN ('OWNER', 'ADMIN')))
+);
+CREATE POLICY "payments_admin_manage" ON payments FOR ALL USING (
+  get_user_role() IN ('ADMIN', 'OWNER')
+) WITH CHECK (
+  get_user_role() IN ('ADMIN', 'OWNER')
+);
+
 -- Notifications: users see own
 CREATE POLICY "notifications_own" ON notifications FOR ALL USING (user_id = auth.uid());
 
